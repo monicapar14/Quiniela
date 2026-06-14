@@ -1,0 +1,74 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.dashboard-page {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  background: url('../img/fondo3.png') no-repeat center center;
+  background-size: cover;
+}
+
+.dashboard-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 8, 23, 0.75);
+  z-index: 1;
+}
+
+.dashboard-page > * {
+  position: relative;
+  z-index: 2;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  padding: 16px;
+  width: 100%;
+  max-width: 480px;
+  box-sizing: border-box;
+}
+
+.tile {
+  aspect-ratio: 1 / 1;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  color: white;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+}
+
+.tile:hover {
+  transform: translateY(-6px) scale(1.04);
+  filter: brightness(1.1);
+}
+
+.tile i {
+  font-size: clamp(20px, 5vw, 30px);
+  margin-bottom: 8px;
+}
+
+.tile span {
+  font-size: clamp(11px, 3vw, 14px);
+  font-weight: 600;
+  text-align: center;
+  padding: 0 6px;
+}
+
+.tile-blue   { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+.tile-green  { background: linear-gradient(135deg, #16a34a, #15803d); }
+.tile-orange { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.tile-purple { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }

@@ -1,0 +1,122 @@
+.ranking-page {
+  flex: 1;
+  padding: 40px 20px;
+  background: url('../img/fondo_colores.png') no-repeat center center;
+  background-size: cover;
+  position: relative;
+  font-family: system-ui, sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+.ranking-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 8, 23, 0.75);
+}
+
+.ranking-page > * {
+  position: relative;
+  z-index: 1;
+}
+
+.ranking-title-clean {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  font-weight: 900;
+  color: white;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.ranking-subtitle {
+  margin-top: 6px;
+  color: #cbd5e1;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.ranking-wrapper {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+}
+
+.ranking-card {
+  width: 100%;
+  max-width: 900px;
+  background: #f8fafc;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0,0,0,.5);
+  align-self: flex-start;
+}
+
+.ranking-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.ranking-table thead {
+  background: linear-gradient(90deg, #e63946, #f4b400);
+  color: white;
+}
+
+.ranking-table th {
+  padding: clamp(10px, 2vw, 16px);
+  text-align: left;
+  font-weight: 800;
+  font-size: clamp(12px, 2vw, 15px);
+}
+
+.ranking-table td {
+  padding: clamp(10px, 2vw, 14px);
+  border-bottom: 1px solid #e2e8f0;
+  font-size: clamp(12px, 2vw, 15px);
+}
+
+.ranking-table tbody tr:hover {
+  background: rgba(230,57,70,0.08);
+}
+
+.points {
+  display: inline-block;
+  min-width: 40px;
+  background: linear-gradient(135deg, #1d4ed8, #2563eb);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.exactos {
+  display: inline-block;
+  min-width: 40px;
+  background: linear-gradient(135deg, #16a34a, #15803d);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.top1 { background: rgba(255, 215, 0, 0.12); }
+.top2 { background: rgba(192, 192, 192, 0.12); }
+.top3 { background: rgba(205, 127, 50, 0.10); }
+
+.position { font-size: 1.2rem; }
+.name { font-weight: 700; }
+
+@media (max-width: 480px) {
+  .ranking-page { padding: 20px 12px; }
+  .ranking-card { border-radius: 12px; }
+  .ranking-table th,
+  .ranking-table td { padding: 10px 8px; }
+}

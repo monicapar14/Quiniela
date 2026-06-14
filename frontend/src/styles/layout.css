@@ -1,0 +1,74 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.app-layout::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  animation: mundialBg 18s infinite;
+  z-index: 0;
+}
+
+.app-layout::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 1;
+}
+
+.app-navbar {
+  position: relative;
+  padding: 10px 0;
+  flex-shrink: 0;
+  background: linear-gradient(90deg, #e63946, #f4b400, #2a9d8f, #1a3c5e);
+  color: white;
+  z-index: 2;
+}
+
+.app-content {
+  flex: 1;
+  min-height: 0;
+  padding: 0;
+  position: relative;
+  z-index: 2;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.app-footer {
+  position: relative;
+  flex-shrink: 0;
+  padding: 8px 0;
+  background: linear-gradient(90deg, #1a3c5e, #2a9d8f, #f4b400, #e63946);
+  color: rgba(255,255,255,0.85);
+  font-size: 13px;
+  z-index: 2;
+}
+
+.brand {
+  font-size: 22px;
+  font-weight: 900;
+  color: white;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 480px) {
+  .brand { font-size: 16px; }
+  .app-navbar .subtitle span { font-size: 12px; letter-spacing: 1px; }
+}

@@ -1,0 +1,147 @@
+.today-page {
+  flex: 1;
+  padding: 30px 20px;
+  background: url('../img/fondopyc.png') no-repeat center center;
+  background-size: cover;
+  position: relative;
+}
+
+.today-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 8, 23, 0.75);
+}
+
+.today-page > * {
+  position: relative;
+  z-index: 1;
+}
+
+.today-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.today-icon {
+  font-size: clamp(32px, 6vw, 46px);
+  color: #f4b400;
+}
+
+.today-header h1 {
+  margin: 0;
+  color: white;
+  font-weight: 900;
+  font-size: clamp(1.3rem, 4vw, 2rem);
+  letter-spacing: 1px;
+}
+
+.today-grid {
+  max-width: 1100px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.today-card {
+  background: linear-gradient(145deg, #f8fafc, #eef2f7);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.35);
+  transition: all .25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.today-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 40px rgba(0,0,0,.45);
+}
+
+.today-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(90deg, #e63946, #f4b400);
+}
+
+.group-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 999px;
+  color: white;
+  font-weight: 800;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+.today-time {
+  text-align: center;
+  margin-bottom: 16px;
+  font-weight: 700;
+  color: #475569;
+  font-size: 14px;
+}
+
+.teams-container { text-align: center; }
+
+.team-name {
+  font-size: clamp(14px, 3vw, 18px);
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.today-score {
+  margin: 16px 0;
+  font-size: clamp(26px, 5vw, 34px);
+  font-weight: 900;
+  color: #002b5b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+}
+
+.vs {
+  font-size: 15px;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.worldcup-btn {
+  background: linear-gradient(90deg, #e63946, #c1121f);
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 28px;
+  font-weight: 800;
+  font-size: 14px;
+  transition: .2s;
+  cursor: pointer;
+}
+
+.worldcup-btn:hover { transform: translateY(-3px); }
+
+@media (max-width: 600px) {
+  .today-page { padding: 20px 12px; }
+  .today-grid { grid-template-columns: 1fr; gap: 14px; }
+}
+
+.grupo-a { background: #e63946; }
+.grupo-b { background: #2563eb; }
+.grupo-c { background: #16a34a; }
+.grupo-d { background: #f59e0b; }
+.grupo-e { background: #9333ea; }
+.grupo-f { background: #06b6d4; }
+.grupo-g { background: #ec4899; }
+.grupo-h { background: #84cc16; }
+.grupo-i { background: #f97316; }
+.grupo-j { background: #14b8a6; }
+.grupo-k { background: #6366f1; }
+.grupo-l { background: #dc2626; }

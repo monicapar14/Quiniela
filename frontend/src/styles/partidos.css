@@ -1,0 +1,158 @@
+.matches-page {
+  flex: 1;
+  padding: 30px 20px;
+  background: url('../img/fondo_colores.png') no-repeat center center;
+  background-size: cover;
+  position: relative;
+}
+
+.matches-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 8, 23, 0.75);
+}
+
+.matches-page > * {
+  position: relative;
+  z-index: 1;
+}
+
+.matches-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.matches-title i {
+  color: #f4b400;
+  font-size: clamp(28px, 5vw, 42px);
+}
+
+.matches-title h1 {
+  color: white;
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  font-weight: 800;
+  margin: 0;
+}
+
+.matches-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.match-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.20);
+  transition: all .25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.match-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(0,0,0,.28);
+}
+
+.match-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  height: 5px;
+  width: 100%;
+  background: linear-gradient(90deg, #e63946, #f4b400);
+}
+
+.group-badge {
+  display: inline-block;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.teams { text-align: center; }
+
+.team-name {
+  font-size: clamp(14px, 3vw, 18px);
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.score {
+  font-size: clamp(26px, 5vw, 34px);
+  font-weight: 900;
+  color: #002b5b;
+  margin: 12px 0;
+}
+
+.vs {
+  color: #94a3b8;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.match-footer {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.match-footer i { color: #e63946; }
+
+.back-btn {
+  margin-top: 32px;
+  text-align: center;
+}
+
+.worldcup-btn {
+  background: #e63946;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 28px;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all .2s ease;
+  cursor: pointer;
+}
+
+.worldcup-btn:hover {
+  background: #c1121f;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+  .matches-page { padding: 20px 12px; }
+  .matches-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}
+
+.grupo-a { background: #e63946; }
+.grupo-b { background: #2563eb; }
+.grupo-c { background: #16a34a; }
+.grupo-d { background: #f59e0b; }
+.grupo-e { background: #9333ea; }
+.grupo-f { background: #06b6d4; }
+.grupo-g { background: #ec4899; }
+.grupo-h { background: #84cc16; }
+.grupo-i { background: #f97316; }
+.grupo-j { background: #14b8a6; }
+.grupo-k { background: #6366f1; }
+.grupo-l { background: #dc2626; }
