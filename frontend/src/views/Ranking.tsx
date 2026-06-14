@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import type { FormEvent} from "react"
 import api from "../api"
 import type { Ranking } from "../Interfaces/participantesDisponibles"
 import { useNavigate } from 'react-router-dom'

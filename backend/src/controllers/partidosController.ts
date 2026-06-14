@@ -4,7 +4,7 @@ import pool from '../db'
 //obtener toda la informacion de los partidos
 export const getInfoPartidos = async (req: Request, res: Response) => {
   try {
-    const [rows] = await pool.query(`SELECT a.nombre as grup_nom, b.equipo_local, b.equipo_visitante, b.fecha, 
+    const [rows] = await pool.query(`SELECT b.id, a.nombre as grup_nom, b.equipo_local, b.equipo_visitante, b.fecha, 
                                             b.goles_local, b.goles_visitante
 	                                      FROM quiniela.grupos a, quiniela.partidos b
                                         WHERE a.id = b.grupo_id
@@ -19,7 +19,7 @@ export const getInfoPartidos = async (req: Request, res: Response) => {
 //obtener toda la informacion de los partidos por día
 export const getPartidosxDia = async (req: Request, res: Response) => {
   try {
-    const [rows] = await pool.query(`SELECT a.nombre as grup_nom, b.equipo_local, b.equipo_visitante, 
+    const [rows] = await pool.query(`SELECT b.id, a.nombre as grup_nom, b.equipo_local, b.equipo_visitante, 
                                             b.fecha, b.goles_local, b.goles_visitante
 	                                      FROM quiniela.grupos a, quiniela.partidos b
                                         WHERE a.id = b.grupo_id
@@ -32,75 +32,303 @@ export const getPartidosxDia = async (req: Request, res: Response) => {
   }
 }
 
-/*
-//obtener los descuentos para los productos disponibles
-export const getDescuentosProductos = async (req: Request, res: Response) => {
-  try {
-    const [rows] = await pool.query('SELECT id_consulta, campoC, campoP, descuento FROM desc_Consultas WHERE id_consulta = 2')
-    res.json(rows)
-  } catch (error) {
-    console.error('Error al obtener los descuentos:', error)
-    res.status(500).json({ message: 'Error al obtener los descuentos' })
+//Calcular puntos
+const calcularPuntos = (
+  realLocal: number,
+  realVisitante: number,
+  predLocal: number,
+  predVisitante: number
+) => {
+
+  // Marcador exacto
+  if (
+    realLocal === predLocal &&
+    realVisitante === predVisitante
+  ) {
+    return {
+      puntos: 3,
+      exacto: true
+    }
+  }
+
+  const resultadoReal =
+    realLocal > realVisitante
+      ? 'L'
+      : realLocal < realVisitante
+      ? 'V'
+      : 'E'
+
+  const resultadoPred =
+    predLocal > predVisitante
+      ? 'L'
+      : predLocal < predVisitante
+      ? 'V'
+      : 'E'
+
+  const unMarcador =
+    realLocal === predLocal ||
+    realVisitante === predVisitante
+
+  // acertó resultado y un marcador
+  if (
+    resultadoReal === resultadoPred &&
+    unMarcador
+  ) {
+    return {
+      puntos: 2,
+      exacto: false
+    }
+  }
+
+  // solo acertó ganador o empate
+  if (resultadoReal === resultadoPred) {
+    return {
+      puntos: 1,
+      exacto: false
+    }
+  }
+
+  // solo acertó un marcador
+  if (unMarcador) {
+    return {
+      puntos: 1,
+      exacto: false
+    }
+  }
+
+  return {
+    puntos: 0,
+    exacto: false
   }
 }
 
-//agregar los productos que selecciono el usuario
-export const agregarProducto = async (req: Request, res: Response) => {
-  try {
-    const { id_confirmacion, id_producto } = req.body
+//Recalcular puntos del partido
+const recalcularPartido = async (
+  partidoId: number
+) => {
 
-    const [rows] = await pool.query(
-      'INSERT INTO Productos_seleccionados (id_confirmacion, id_producto) VALUES (?, ?)',
-      [id_confirmacion, id_producto]
+  const [partidos]: any = await pool.query(`SELECT goles_local, goles_visitante
+                                              FROM quiniela.partidos
+                                              WHERE id = ?`,
+    [partidoId]
+  )
+
+  if (partidos.length === 0) {
+    return
+  }
+
+  const partido = partidos[0]
+
+  const [predicciones]: any = await pool.query(`SELECT *
+                                                  FROM quiniela.predicciones
+                                                  WHERE partido_id = ?`,
+    [partidoId]
+  )
+
+  for (const pred of predicciones) {
+
+    const resultado = calcularPuntos(
+      partido.goles_local,
+      partido.goles_visitante,
+      pred.pred_goles_local,
+      pred.pred_goles_visitante
     )
 
-    res.status(201).json({ message: 'Productos ingresados', result: rows })
-  } catch (error) {
-    console.log('Error al insertar los productos', error)
-    res.status(500).json({ message: 'Error al insertar los productos' })
+    /* ===========================
+       puntajes_partido
+    ============================ */
+
+    await pool.query(
+      `
+        INSERT INTO quiniela.puntajes_partido
+        (
+          participante_id,
+          partido_id,
+          puntos
+        )
+        VALUES
+        (
+          ?,
+          ?,
+          ?
+        )
+        ON DUPLICATE KEY UPDATE
+          puntos = VALUES(puntos)
+      `,
+      [
+        pred.participante_id,
+        partidoId,
+        resultado.puntos
+      ]
+    )
+
+    /* ===========================
+       marcadores_acertados
+    ============================ */
+
+    await pool.query(
+      `
+        INSERT INTO quiniela.marcadores_acertados
+        (
+          participante_id,
+          partido_id,
+          acerto_exacto
+        )
+        VALUES
+        (
+          ?,
+          ?,
+          ?
+        )
+        ON DUPLICATE KEY UPDATE
+          acerto_exacto =
+          VALUES(acerto_exacto)
+      `,
+      [
+        pred.participante_id,
+        partidoId,
+        resultado.exacto
+      ]
+    )
+  }
+
+  /* ===========================
+     RECALCULAR RANKING
+  ============================ */
+
+  const [participantes]: any =
+    await pool.query(`
+      SELECT id
+      FROM quiniela.participantes
+    `)
+
+  for (const participante of participantes) {
+
+    const [puntos]: any =
+      await pool.query(
+        `
+          SELECT
+            IFNULL(SUM(puntos),0)
+            AS total
+          FROM quiniela.puntajes_partido
+          WHERE participante_id = ?
+        `,
+        [participante.id]
+      )
+
+    const [exactos]: any =
+      await pool.query(
+        `
+          SELECT
+            COUNT(*) AS total
+          FROM quiniela.marcadores_acertados
+          WHERE participante_id = ?
+          AND acerto_exacto = TRUE
+        `,
+        [participante.id]
+      )
+
+    await pool.query(
+      `
+        INSERT INTO quiniela.ranking
+        (
+          participante_id,
+          puntos_totales,
+          exactos_totales
+        )
+        VALUES
+        (
+          ?,
+          ?,
+          ?
+        )
+        ON DUPLICATE KEY UPDATE
+          puntos_totales =
+            VALUES(puntos_totales),
+          exactos_totales =
+            VALUES(exactos_totales)
+      `,
+      [
+        participante.id,
+        puntos[0].total,
+        exactos[0].total
+      ]
+    )
   }
 }
 
-//obtener los seleccionados
-export const getProductosById = async (req: Request, res: Response) => {
+//Editar puntos del partido
+export const editarPartido = async (
+  req: Request,
+  res: Response
+) => {
+
   try {
+
     const { id } = req.params
 
-    const [productos]: any = await pool.query(
-      'SELECT a.id_producto, a.nombre, a.precio FROM Productos a, Productos_seleccionados b, Confirmacion c WHERE a.id_producto = b.id_producto AND c.id_confirmacion = ? AND b.id_confirmacion = c.id_confirmacion',
-      [id]
+    const {
+      goles_local,
+      goles_visitante
+    } = req.body
+
+    await pool.query(`UPDATE quiniela.partidos
+                        SET goles_local = ?,
+                            goles_visitante = ?
+                        WHERE id = ?`,
+      [
+        goles_local,
+        goles_visitante,
+        id
+      ]
     )
 
-    res.json({productos})
+    await recalcularPartido(
+      Number(id)
+    )
+
+    res.json({
+      message:
+        'Partido actualizado correctamente'
+    })
 
   } catch (error) {
-    console.error('Error al obtener los productos seleccionados:', error)
-    res.status(500).json({ message: 'Error al obtener los productos seleccionados' })
+
+    console.error(error)
+
+    res.status(500).json({
+      message:
+        'Error al actualizar el partido'
+    })
   }
 }
 
-export const updateProductos = async (req: Request, res: Response) => {
-    const { id_confirmacion, productos } = req.body
+export const getPrediccionesPartido = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    
+    const id = Number(req.params.id);
 
-    try {
-        await pool.query(
-            'DELETE FROM Productos_seleccionados WHERE id_confirmacion = ?',
-            [id_confirmacion]
-        )
+    const [rows] = await pool.query(`SELECT a.id, a.nombre, b.pred_goles_local, b.pred_goles_visitante
+                                       FROM participantes a, predicciones b
+                                       WHERE a.id = b.participante_id
+                                         AND b.partido_id = ?
+                                     ORDER BY a.id`,
+      [id]
+    );
 
-        const insertar = productos.map((id_producto: number) =>
-            pool.query(
-                'INSERT INTO Productos_seleccionados (id_confirmacion, id_producto) VALUES (?, ?)',
-                [id_confirmacion, id_producto]
-            )
-        )
+    res.json(rows);
 
-        await Promise.all(insertar)
+  } catch (error) {
 
-        res.json({ message: 'Productos actualizados' })
+    console.error(error);
 
-    } catch (error) {
-        console.error('Error al actualizar productos:', error)
-        res.status(500).json({ message: 'Error al actualizar productos' })
-    }
-}*/
+    res.status(500).json({
+      message:
+        'Error al obtener predicciones'
+    });
+
+  }
+};

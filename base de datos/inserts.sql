@@ -14,7 +14,7 @@ INSERT INTO grupos (fase_id, nombre) VALUES
 (1, 'E'),
 (1, 'F'),
 (1, 'G'),
-(1, 'H');
+(1, 'H'),
 (1, 'I'),
 (1, 'J'),
 (1, 'K'),
@@ -161,3 +161,22 @@ INSERT INTO `quiniela`.`puntajes_partido` (`id`, `participante_id`, `partido_id`
 
 //ranking
 INSERT INTO `quiniela`.`ranking` (`id`, `participante_id`, `puntos_totales`, `exactos_totales`) VALUES ('1', '1', '0', '0');
+
+
+//login
+INSERT INTO usuarios(nombre,password_hash,rol)
+VALUES(
+'Mpar',
+'$2a$12$XDUCD0m91DR9A.83CDR8o.3YvX6FlM17BMylJeNa.cl3L51.DCLrG',
+'admin'
+);
+
+//scripts
+ALTER TABLE puntajes_partido
+ADD UNIQUE(participante_id, partido_id);
+
+ALTER TABLE marcadores_acertados
+ADD UNIQUE(participante_id, partido_id);
+
+ALTER TABLE ranking
+ADD UNIQUE(participante_id);

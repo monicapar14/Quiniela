@@ -3,6 +3,7 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import participantesRouter from './routes/participantes'
 import partidosRouter from './routes/partidos'
+import loginRouter from './routes/login'
 
 dotenv.config()
 
@@ -22,6 +23,9 @@ app.use('/api/participantes', participantesRouter)
 
 //Ruta de partidos
 app.use('/api/partidos', partidosRouter)
+
+//Ruta de login
+app.use('/api/login', loginRouter)
 
 
 app.listen(Number(PORT), '0.0.0.0', () => {

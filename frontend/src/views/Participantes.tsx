@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import type { FormEvent} from "react"
 import api from "../api"
 import type { ParticipantesObtenidos } from "../Interfaces/participantesDisponibles"
 import { useNavigate } from 'react-router-dom'
@@ -27,10 +26,6 @@ const Participantes = () => {
 
         obtenerParticipantes()
     }, [])    
-
-    const handleSubmit = (e: FormEvent) => {
-        e.preventDefault();
-    }
         
     return (
         <Layout>

@@ -1,27 +1,35 @@
-import { useEffect, useState, useRef } from "react"
-import type { FormEvent} from "react"
+import { useEffect, useState } from "react"
 import api from "../api"
 import type { PartidosObtenidos } from "../Interfaces/partidosDisponibles"
-import type { DescuentosDisponibles } from "../Interfaces/partidosDisponibles"
 import { useNavigate } from 'react-router-dom'
-import type { ObtenidosSeleccionados } from '../Interfaces/partidosDisponibles'
 import Layout from '../components/Layout'
 import '../styles/partidos.css'
-
-type ProductoConSeleccion = PartidosObtenidos & { seleccionado?: boolean }
 
 const Partidos = () => {
 
     const navigate = useNavigate();    
 
-    const [descuentos, setDescuentos] = useState<DescuentosDisponibles[]>([]);
-    const [partidos, setPartidos] = useState<ProductoConSeleccion[]>([]);
+    const usuario = JSON.parse(
+        localStorage.getItem("usuario") || "null"
+    );
 
-    const [descuento_total, setDescuento_total] = useState(0)
+    const esAdmin = usuario?.rol === "admin";
 
-    const descuento_ref = useRef(0);
+    const [partidos, setPartidos] = useState<PartidosObtenidos[]>([]);
 
-    const [obtenidos, setObtenidos] = useState<ObtenidosSeleccionados[]>([])
+    const [mostrarModal, setMostrarModal] = useState(false);
+
+    const [partidoEditar, setPartidoEditar] = useState<PartidosObtenidos | null>(null);
+
+    const [golesLocal, setGolesLocal] = useState<number | string>("");
+
+    const [golesVisitante, setGolesVisitante] = useState<number | string>("");
+
+    const [mostrarPredicciones, setMostrarPredicciones] = useState(false);
+
+    const [predicciones, setPredicciones] = useState<any[]>([]);
+
+    const [partidoPredicciones, setPartidoPredicciones] = useState<PartidosObtenidos | null>(null);
 
     useEffect(() => {
 
@@ -34,71 +42,95 @@ const Partidos = () => {
             }
         }
 
-        const obtenerDescuentoS = async () => {
-            try {
-                const response = await api.get('/productos/descuentos')
-                setDescuentos(response.data)
-            } catch (error) {
-                console.error('Error al obtener los productos:', error)
-            }
-        }
-
         obtenerPartidos()
-        obtenerDescuentoS()
     }, [])
 
-    useEffect(() => {
-        if(partidos.length > 0 && obtenidos.length > 0) {
-            const productosActualizados = partidos.map(producto => ({
-                ...producto,
-                seleccionado: obtenidos.some(o => o.id_producto === producto.id_producto)
-            }))
-            setPartidos(productosActualizados)
-            const seleccionadosIniciales = productosActualizados.filter(s => s.seleccionado)
-            setSeleccionados(seleccionadosIniciales)
+    const abrirModal = (
+        partido: PartidosObtenidos
+    ) => {
 
-            descuento_ref.current = 0
-            descuentos.forEach((descuento) => {
-                if(seleccionadosIniciales.length >= Number(descuento.campoC)){
-                    if(descuento_ref.current < Number(descuento.descuento)){
-                        descuento_ref.current = Number(descuento.descuento)
-                    }
-                }
-            })
-            setDescuento_total(descuento_ref.current)
-        }
-    }, [partidos.length, obtenidos.length])    
+        setPartidoEditar(partido);
 
-    const handleSubmit = async (e: FormEvent) => {
-        e.preventDefault();
+        setGolesLocal(partido.goles_local ?? "");
 
-        await enviarDatos();
+        setGolesVisitante(partido.goles_visitante ?? "");
 
-        await new Promise(r => setTimeout(r, 300))
+        setMostrarModal(true);
+    };
 
-        navigate('/confirmacion', { state: { foo: id_Sesion } });
-    }
+    const guardarResultado = async () => {
 
-    const enviarDatos = async () => {
-        console.log("descuento " + descuento_ref.current);
+        if (!partidoEditar) return;
 
-        const idsSeleccionados = seleccionados.map(s => s.id_producto).sort()
-        const idsObtenidos = obtenidos.map(o => o.id_producto).sort()
-        const cambiaron = JSON.stringify(idsSeleccionados) !== JSON.stringify(idsObtenidos)
-
-        console.log("cambiaron: " + cambiaron)
-
-        // Siempre actualiza el descuento
         try {
-            const respuesta = await api.post('/confirmaciones/updateP', {
-                id_confirmacion: id_Sesion,
-                descuento_producto: descuento_ref.current
-            })
-            console.log(respuesta.data)
-        } catch(error) {
-            console.error('Error al actualizar descuento:', error)
+
+            await api.put(`/partidos/${partidoEditar.id}`,
+                {
+                    goles_local: golesLocal,
+                    goles_visitante: golesVisitante
+                }
+            );
+
+            setPartidos(
+                partidos.map((p) =>
+                    p.id === partidoEditar.id
+                        ? {
+                            ...p,
+                            goles_local: Number(golesLocal),
+                            goles_visitante: Number(golesVisitante)
+                        }
+                        : p
+                )
+            );
+
+            setMostrarModal(false);
+
+            alert(
+                "Resultado actualizado correctamente"
+            );
+
+        } catch (error) {
+            console.error(error);
+            alert(
+                "Error al actualizar el partido"
+            );
         }
-    }
+    };
+
+    const verPredicciones = async (
+        partido: PartidosObtenidos
+    ) => {
+
+        try {
+
+            const response =
+                await api.get(
+                    `/partidos/${partido.id}/predicciones`
+                );
+
+            setPredicciones(
+                response.data
+            );
+
+            setPartidoPredicciones(
+                partido
+            );
+
+            setMostrarPredicciones(
+                true
+            );
+
+        }
+        catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Error al obtener predicciones"
+            );
+
+        }
+    };
 
     const obtenerClaseGrupo = (grupo) => {
         const letra = grupo.replace('Grupo ', '').trim().toLowerCase();
@@ -145,6 +177,37 @@ const Partidos = () => {
                                     })}
                                 </span>
                             </div>
+                            {
+                                esAdmin && (
+                                    <div
+                                        style={{
+                                            marginTop: '15px',
+                                            textAlign: 'center'
+                                        }}
+                                    >
+                                        <button
+                                            className="worldcup-btn"
+                                            onClick={() =>
+                                                abrirModal(partido)
+                                            }
+                                        >
+                                            <i className="fa-solid fa-pen me-2"></i>
+                                            Editar Resultado
+                                        </button>
+                                    </div>
+                                )
+                            }
+                            <div style={{ marginTop: '10px', textAlign: 'center'}}>
+                                <button
+                                    className="worldcup-btn"
+                                    onClick={() =>
+                                        verPredicciones(partido)
+                                    }
+                                >
+                                    <i className="fa-solid fa-eye me-2"></i>
+                                    Ver Predicciones
+                                </button>
+                            </div>
                         </div>
                     ))}
                 </div>
@@ -158,6 +221,173 @@ const Partidos = () => {
                         Regresar
                     </button>
                 </div>
+
+                {
+                    mostrarModal &&
+                    partidoEditar && (
+                        <div className="modal-overlay">
+
+                            <div className="modal-partido">
+
+                                <h2>
+                                    Editar Resultado
+                                </h2>
+
+                                <p>
+                                    {partidoEditar.equipo_local}
+                                    {" vs "}
+                                    {partidoEditar.equipo_visitante}
+                                </p>
+
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        gap: '20px',
+                                        justifyContent:
+                                            'center'
+                                    }}
+                                >
+
+                                    <input
+                                        type="number"
+                                        value={golesLocal}
+                                        onChange={(e) =>
+                                            setGolesLocal(
+                                                e.target.value
+                                            )
+                                        }
+                                        placeholder="Local"
+                                    />
+
+                                    <input
+                                        type="number"
+                                        value={
+                                            golesVisitante
+                                        }
+                                        onChange={(e) =>
+                                            setGolesVisitante(
+                                                e.target.value
+                                            )
+                                        }
+                                        placeholder="Visitante"
+                                    />
+
+                                </div>
+
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        gap: '20px',
+                                        marginTop: '20px',
+                                        justifyContent:
+                                            'center'
+                                    }}
+                                >
+                                    <button
+                                        className="worldcup-btn"
+                                        onClick={
+                                            guardarResultado
+                                        }
+                                    >
+                                        Guardar
+                                    </button>
+
+                                    <button
+                                        className="worldcup-btn"
+                                        onClick={() =>
+                                            setMostrarModal(
+                                                false
+                                            )
+                                        }
+                                    >
+                                        Cancelar
+                                    </button>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    )
+                }
+
+                {
+                    mostrarPredicciones &&
+                    partidoPredicciones && (
+
+                        <div className="modal-overlay">
+                            <div className="modal-partido-predicciones">
+                                <div className="modal-header-predicciones">
+                                    <h2>
+                                        ⚽ Predicciones
+                                    </h2>
+
+                                    <p>
+                                        {partidoPredicciones.equipo_local}
+                                        {" vs "}
+                                        {partidoPredicciones.equipo_visitante}
+                                    </p>
+                                </div>
+
+                                {
+                                    predicciones.length === 0 &&
+                                    (
+                                        <p>
+                                            No existen predicciones
+                                            para este partido.
+                                        </p>
+                                    )
+                                }
+
+                                <div className="lista-predicciones">
+                                    {
+                                        predicciones.map(
+                                            (
+                                                p,
+                                                index
+                                            ) => (
+                                                <div
+                                                    key={index}
+                                                    className="prediccion-item"
+                                                >
+                                                    <span
+                                                        className="nombre-participante"
+                                                    >
+                                                        🏆 {p.nombre}
+                                                    </span>
+
+                                                    <span
+                                                        className="marcador-prediccion"
+                                                    >
+                                                        {p.pred_goles_local}
+                                                        {" - "}
+                                                        {p.pred_goles_visitante}
+                                                    </span>
+
+                                                </div>
+                                            )
+                                        )
+                                    }
+                                </div>
+
+                                <div
+                                    className="modal-footer-predicciones"
+                                >
+                                    <button
+                                        className="worldcup-btn"
+                                        onClick={() =>
+                                            setMostrarPredicciones(
+                                                false
+                                            )
+                                        }
+                                    >
+                                        Cerrar
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    )
+                }
             </div>
         </Layout>        
     )

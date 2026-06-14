@@ -1,4 +1,5 @@
 export interface PartidosObtenidos {
+  id: number;
   grup_nom: string;
   equipo_local: string;
   equipo_visitante: string;

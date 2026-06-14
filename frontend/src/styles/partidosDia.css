@@ -145,3 +145,157 @@
 .grupo-j { background: #14b8a6; }
 .grupo-k { background: #6366f1; }
 .grupo-l { background: #dc2626; }
+
+/* ===== OVERLAY ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 10, 25, 0.75);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* ===== MODAL MÁS PEQUEÑO Y PRO ===== */
+.modal-partido-predicciones {
+  width: min(520px, 92vw);
+  max-height: 78vh;
+  display: flex;
+  flex-direction: column;
+
+  border-radius: 18px;
+  overflow: hidden;
+
+  background: linear-gradient(160deg, #0b1220, #0f1b35);
+  border: 1px solid rgba(255,255,255,0.08);
+
+  box-shadow: 0 30px 90px rgba(0,0,0,0.65);
+}
+
+/* ===== HEADER (MUNDIAL 2026 STYLE) ===== */
+.modal-header-predicciones {
+  padding: 14px 16px;
+  text-align: center;
+
+  background: linear-gradient(
+    90deg,
+    #d90429,
+    #ef233c,
+    #3a86ff
+  );
+
+  color: white;
+}
+
+.modal-header-predicciones h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 900;
+}
+
+.modal-header-predicciones p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  opacity: 0.9;
+  font-weight: 600;
+}
+
+/* ===== LISTA MÁS COMPACTA ===== */
+.lista-predicciones {
+  padding: 12px;
+  overflow-y: auto;
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ===== CARD DE PREDICCIÓN (ULTRA COMPACTA) ===== */
+.prediccion-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 10px 12px;
+  border-radius: 12px;
+
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+
+  transition: 0.2s ease;
+}
+
+.prediccion-item:hover {
+  transform: scale(1.02);
+  background: rgba(255,255,255,0.1);
+}
+
+/* ===== NOMBRE CON BANDERA ===== */
+.nombre-participante {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-weight: 800;
+  color: #e2e8f0;
+  font-size: 14px;
+}
+
+/* bandera estilo badge */
+.bandera {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+/* ===== MARCADOR ===== */
+.marcador-prediccion {
+  font-weight: 900;
+  font-size: 14px;
+
+  background: linear-gradient(90deg, #ffd60a, #ffb703);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ===== FOOTER ===== */
+.modal-footer-predicciones {
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+
+  border-top: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03);
+}
+
+/* ===== BOTÓN ===== */
+.worldcup-btn {
+  background: linear-gradient(90deg, #d90429, #ef233c);
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 22px;
+  font-weight: 800;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.worldcup-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* scroll fino */
+.lista-predicciones::-webkit-scrollbar {
+  width: 5px;
+}
+
+.lista-predicciones::-webkit-scrollbar-thumb {
+  background: #ef233c;
+  border-radius: 10px;
+}
