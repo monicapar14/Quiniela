@@ -38,6 +38,7 @@ INSERT INTO `quiniela`.`participantes` (`nombre`) VALUES ('Norma y Mara');
 INSERT INTO `quiniela`.`participantes` (`nombre`) VALUES ('Francis');
 INSERT INTO `quiniela`.`participantes` (`nombre`) VALUES ('Rony');
 INSERT INTO `quiniela`.`participantes` (`nombre`) VALUES ('Laura');
+INSERT INTO `quiniela`.`participantes` (`nombre`) VALUES ('Kevin');
 
 //partidos
 INSERT INTO partidos (fase_id, grupo_id, equipo_local, equipo_visitante, fecha) VALUES
@@ -151,23 +152,18 @@ UPDATE `quiniela`.`partidos` SET `goles_local` = '2', `goles_visitante` = '0' WH
 UPDATE `quiniela`.`partidos` SET `goles_local` = '2', `goles_visitante` = '1' WHERE (`id` = '2');
 UPDATE `quiniela`.`partidos` SET `goles_local` = '1', `goles_visitante` = '1' WHERE (`id` = '3');
 
-//predicciones
-INSERT INTO `quiniela`.`predicciones` (`id`, `participante_id`, `partido_id`, `pred_goles_local`, `pred_goles_visitante`) VALUES ('1', '1', '1', '1', '1');
-
-//puntaje
-INSERT INTO `quiniela`.`puntajes_partido` (`id`, `participante_id`, `partido_id`, `puntos`) VALUES ('1', '1', '1', '0');
-INSERT INTO `quiniela`.`puntajes_partido` (`id`, `participante_id`, `partido_id`, `puntos`) VALUES ('2', '1', '2', '0');
-INSERT INTO `quiniela`.`puntajes_partido` (`id`, `participante_id`, `partido_id`, `puntos`) VALUES ('3', '1', '3', '0');
-
-//ranking
-INSERT INTO `quiniela`.`ranking` (`id`, `participante_id`, `puntos_totales`, `exactos_totales`) VALUES ('1', '1', '0', '0');
-
-
 //login
 INSERT INTO usuarios(nombre,password_hash,rol)
 VALUES(
 'Mpar',
 '$2a$12$XDUCD0m91DR9A.83CDR8o.3YvX6FlM17BMylJeNa.cl3L51.DCLrG',
+'admin'
+);
+
+INSERT INTO usuarios(nombre,password_hash,rol)
+VALUES(
+'Dani',
+'$2a$12$UCbkqlzpw8MFCn5AcbCCkexEsPOxJ/nLQ/Dg5chssjtCuhrZ.gLQO',
 'admin'
 );
 

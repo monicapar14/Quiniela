@@ -4,6 +4,7 @@ import type { PartidosObtenidos } from "../Interfaces/partidosDisponibles"
 import { useNavigate } from 'react-router-dom'
 import Layout from '../components/Layout'
 import '../styles/partidos.css'
+import { banderas } from '../utils/banderas'
 
 const Partidos = () => {
 
@@ -30,6 +31,14 @@ const Partidos = () => {
     const [predicciones, setPredicciones] = useState<any[]>([]);
 
     const [partidoPredicciones, setPartidoPredicciones] = useState<PartidosObtenidos | null>(null);
+
+    const [mostrarEditarPred, setMostrarEditarPred] = useState(false);
+
+    const [prediccionEditar, setPrediccionEditar] = useState<any>(null);
+
+    const [nuevoLocal, setNuevoLocal] = useState<number | string>("");
+
+    const [nuevoVisitante, setNuevoVisitante] = useState<number | string>("");
 
     useEffect(() => {
 
@@ -103,10 +112,7 @@ const Partidos = () => {
 
         try {
 
-            const response =
-                await api.get(
-                    `/partidos/${partido.id}/predicciones`
-                );
+            const response = await api.get(`/partidos/${partido.id}/predicciones`);
 
             setPredicciones(
                 response.data
@@ -127,6 +133,89 @@ const Partidos = () => {
 
             alert(
                 "Error al obtener predicciones"
+            );
+
+        }
+    };
+
+    const abrirEditarPrediccion = (
+        prediccion: any
+    ) => {
+
+        setPrediccionEditar(
+            prediccion
+        );
+
+        setNuevoLocal(
+            prediccion.pred_goles_local
+        );
+
+        setNuevoVisitante(
+            prediccion.pred_goles_visitante
+        );
+
+        setMostrarEditarPred(
+            true
+        );
+    };
+
+    const guardarPrediccion = async (
+    ) => {
+        
+        if (!prediccionEditar)
+            return;
+
+        try {
+
+            await api.put(
+                `/predicciones/${prediccionEditar.id}`,
+                {
+                    pred_goles_local:
+                        nuevoLocal,
+
+                    pred_goles_visitante:
+                        nuevoVisitante,
+
+                    partido_id:
+                        prediccionEditar.partido_id
+                }
+            );
+
+            setPredicciones(
+                predicciones.map(
+                    (p) =>
+                        p.id ===
+                        prediccionEditar.id
+                            ? {
+                                ...p,
+                                pred_goles_local:
+                                    Number(
+                                        nuevoLocal
+                                    ),
+                                pred_goles_visitante:
+                                    Number(
+                                        nuevoVisitante
+                                    )
+                            }
+                            : p
+                )
+            );
+
+            setMostrarEditarPred(
+                false
+            );
+
+            alert(
+                "Predicción actualizada"
+            );
+
+        }
+        catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Error al actualizar"
             );
 
         }
@@ -153,7 +242,22 @@ const Partidos = () => {
                             </div>
                             <div className="teams">                        
                                 <div className="team-name">
+                                    <img
+                                        src={
+                                            banderas[
+                                                partido.equipo_local
+                                            ]
+                                        }
+                                        alt=""
+                                        style={{
+                                            width: '35px',
+                                            height: '25px',
+                                            marginRight: '10px'
+                                        }}
+                                    />
+
                                     {partido.equipo_local}
+
                                 </div>
                                 <div className="score">
                                     {partido.goles_local ?? "-"}
@@ -161,7 +265,22 @@ const Partidos = () => {
                                     {partido.goles_visitante ?? "-"}
                                 </div>
                                 <div className="team-name">
+                                    <img
+                                        src={
+                                            banderas[
+                                                partido.equipo_visitante
+                                            ]
+                                        }
+                                        alt=""
+                                        style={{
+                                            width: '35px',
+                                            height: '25px',
+                                            marginRight: '10px'
+                                        }}
+                                    />
+
                                     {partido.equipo_visitante}
+
                                 </div>
                             </div>
                             <div className="match-footer">
@@ -349,20 +468,45 @@ const Partidos = () => {
                                                     key={index}
                                                     className="prediccion-item"
                                                 >
+
                                                     <span
                                                         className="nombre-participante"
                                                     >
                                                         🏆 {p.nombre}
                                                     </span>
 
-                                                    <span
-                                                        className="marcador-prediccion"
+                                                    <div
+                                                        style={{
+                                                            display: 'flex',
+                                                            gap: '10px',
+                                                            alignItems: 'center'
+                                                        }}
                                                     >
-                                                        {p.pred_goles_local}
-                                                        {" - "}
-                                                        {p.pred_goles_visitante}
-                                                    </span>
 
+                                                        <span
+                                                            className="marcador-prediccion"
+                                                        >
+                                                            {p.pred_goles_local}
+                                                            {" - "}
+                                                            {p.pred_goles_visitante}
+                                                        </span>
+
+                                                        {
+                                                            esAdmin && (
+                                                                <button
+                                                                    className="worldcup-btn"
+                                                                    onClick={() =>
+                                                                        abrirEditarPrediccion(
+                                                                            p
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    <i className="fa-solid fa-pen"></i>
+                                                                </button>
+                                                            )
+                                                        }
+
+                                                    </div>
                                                 </div>
                                             )
                                         )
@@ -386,6 +530,105 @@ const Partidos = () => {
                             </div>
 
                         </div>
+                    )
+                }
+
+                {
+                    mostrarEditarPred &&
+                    prediccionEditar && (
+
+                        <div
+                            className="modal-overlay"
+                        >
+
+                            <div
+                                className="modal-partido"
+                            >
+
+                                <h2>
+                                    Editar Predicción
+                                </h2>
+
+                                <h3>
+                                    {prediccionEditar.nombre}
+                                </h3>
+
+                                <div
+                                    style={{
+                                        display:
+                                            'flex',
+                                        gap: '20px',
+                                        justifyContent:
+                                            'center'
+                                    }}
+                                >
+
+                                    <input
+                                        type="number"
+                                        value={
+                                            nuevoLocal
+                                        }
+                                        onChange={(e) =>
+                                            setNuevoLocal(
+                                                e.target
+                                                    .value
+                                            )
+                                        }
+                                    />
+
+                                    <input
+                                        type="number"
+                                        value={
+                                            nuevoVisitante
+                                        }
+                                        onChange={(e) =>
+                                            setNuevoVisitante(
+                                                e.target
+                                                    .value
+                                            )
+                                        }
+                                    />
+
+                                </div>
+
+                                <div
+                                    style={{
+                                        marginTop:
+                                            '20px',
+                                        display:
+                                            'flex',
+                                        gap: '20px',
+                                        justifyContent:
+                                            'center'
+                                    }}
+                                >
+
+                                    <button
+                                        className="worldcup-btn"
+                                        onClick={
+                                            guardarPrediccion
+                                        }
+                                    >
+                                        Guardar
+                                    </button>
+
+                                    <button
+                                        className="worldcup-btn"
+                                        onClick={() =>
+                                            setMostrarEditarPred(
+                                                false
+                                            )
+                                        }
+                                    >
+                                        Cancelar
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
                     )
                 }
             </div>

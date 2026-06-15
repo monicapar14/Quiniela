@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import participantesRouter from './routes/participantes'
 import partidosRouter from './routes/partidos'
 import loginRouter from './routes/login'
+import prediccionesRouter from './routes/predicciones'
 
 dotenv.config()
 
@@ -27,6 +28,8 @@ app.use('/api/partidos', partidosRouter)
 //Ruta de login
 app.use('/api/login', loginRouter)
 
+//Ruta de predicciones
+app.use('/api/predicciones', prediccionesRouter)
 
 app.listen(Number(PORT), '0.0.0.0', () => {
   console.log(`Servidor corriendo en puerto ${PORT}`)

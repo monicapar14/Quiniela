@@ -18,9 +18,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             {/* NAVBAR */}
             <nav className="app-navbar">
                 <div className="container d-flex justify-content-between align-items-center">
-                    <span className="brand">
+                    <Link to="/" className="brand" style={{ textDecoration: "none", color: "inherit" }}>
                         ⚽ Quiniela Salguero
-                    </span>
+                    </Link>
                     <span className="subtitle d-flex align-items-center gap-2">
                         <img src={fondo} alt="Mundial" style={{ height: "28px" }} />
                         <span style={{ letterSpacing: "2px" }}>

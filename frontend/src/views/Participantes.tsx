@@ -26,7 +26,7 @@ const Participantes = () => {
 
         obtenerParticipantes()
     }, [])    
-        
+
     return (
         <Layout>
             <div className="participants-page">
@@ -43,6 +43,7 @@ const Participantes = () => {
                                 <th>#</th>
                                 <th>Participante</th>
                                 <th>Puntos</th>
+                                <th></th>
                             </tr>
                         </thead>
                         
@@ -52,7 +53,22 @@ const Participantes = () => {
                                     <td>{index + 1}</td>
                                     <td>{p.nombre}</td>
                                     <td>
-                                        <span className="points">{p.puntos_totales}</span>
+                                        <span className="points">
+                                            {p.puntos_totales}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button
+                                            className="worldcup-btn"
+                                            onClick={() =>
+                                                navigate(
+                                                    `/participante/${p.id_p}/predicciones`
+                                                )
+                                            }
+                                        >
+                                            <i className="fa-solid fa-eye me-2"></i>
+                                            Ver Predicciones
+                                        </button>
                                     </td>
                                 </tr>
                             ))}

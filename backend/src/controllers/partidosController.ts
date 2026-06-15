@@ -311,7 +311,7 @@ export const getPrediccionesPartido = async (
     
     const id = Number(req.params.id);
 
-    const [rows] = await pool.query(`SELECT a.id, a.nombre, b.pred_goles_local, b.pred_goles_visitante
+    const [rows] = await pool.query(`SELECT a.id, a.nombre, b.partido_id, b.pred_goles_local, b.pred_goles_visitante
                                        FROM participantes a, predicciones b
                                        WHERE a.id = b.participante_id
                                          AND b.partido_id = ?
