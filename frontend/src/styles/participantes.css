@@ -1,24 +1,19 @@
 .participants-page {
   flex: 1;
   padding: 40px 20px;
-  background: url('../img/fondo_lados.png') no-repeat center center;
-  background-size: cover;
+
+  background-image: url('../img/fondoanio.png');
+  background-repeat: repeat;
+  background-position: center center;
+  background-size: 200px;
+
   position: relative;
+
   display: flex;
   justify-content: center;
   align-items: center;
-}
 
-.participants-page::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(2, 8, 23, 0.75);
-}
-
-.participants-page > * {
-  position: relative;
-  z-index: 1;
+  overflow: hidden;
 }
 
 .participants-card {

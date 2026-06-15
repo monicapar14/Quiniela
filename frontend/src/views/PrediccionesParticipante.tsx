@@ -79,7 +79,6 @@ const PrediccionesParticipante = () => {
             <div
                 className="matches-page"
             >
-
                 <div
                     className="matches-title"
                 >
@@ -102,7 +101,9 @@ const PrediccionesParticipante = () => {
                         textAlign:
                             "center",
                         marginBottom:
-                            "30px"
+                            "30px", 
+                        fontFamily: "FontAwesome",
+                        color: '#e65a3e'
                     }}
                 >
                     {nombre}
@@ -112,7 +113,8 @@ const PrediccionesParticipante = () => {
                     style={{
                         textAlign: "center",
                         marginBottom: "20px",
-                        marginTop: "50px"
+                        marginTop: "50px",
+                        color: "cyan"
                     }}
                 >
                     ✅ Partidos jugados
