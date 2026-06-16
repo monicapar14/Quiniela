@@ -255,13 +255,13 @@ const Partidos = () => {
                             <div className="match-footer">
                                 <span>
                                     <i className="fa-solid fa-calendar-days me-1"></i>
-                                    {new Date(partido.fecha).toLocaleDateString('es-ES', {
+                                    {new Date(partido.fecha + 'Z').toLocaleDateString('es-ES', {
                                         timeZone: 'America/Guatemala'
                                     })}
                                 </span>
                                 <span>
                                     <i className="fa-solid fa-clock me-1"></i>
-                                    {new Date(partido.fecha).toLocaleTimeString('es-ES', {
+                                    {new Date(partido.fecha + 'Z').toLocaleTimeString('es-ES', {
                                         hour: '2-digit',
                                         minute: '2-digit',
                                         timeZone: 'America/Guatemala'
