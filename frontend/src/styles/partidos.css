@@ -282,7 +282,7 @@
 .modal-header-predicciones {
   padding: 14px 20px;
   text-align: center;
-  background-image: url('../img/fondo_colores.png');
+  background-image: url('../img/fondopyc.png');
   background-size: cover;
   background-position: center;
   position: relative;
@@ -322,7 +322,7 @@
   align-items: center;
   gap: 6px;
   font-weight: 700;
-  font-size: 13px;
+  font-size: 20px;
 }
 
 .modal-equipo img {
@@ -335,7 +335,7 @@
 .modal-vs {
   color: #f4b400;
   font-weight: 900;
-  font-size: 13px;
+  font-size: 20px;
 }
 
 /* ===== TABLA HEADER ===== */
@@ -365,7 +365,7 @@
 /* ===== ITEM ===== */
 .prediccion-item {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr auto;
   align-items: center;
   padding: 10px 14px;
   border-radius: 12px;
