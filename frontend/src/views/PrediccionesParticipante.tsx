@@ -9,7 +9,7 @@ const PrediccionesParticipante = () => {
 
     const navigate = useNavigate();
 
-    const [predicciones, setPredicciones] = useState<any[]>([]);
+    const [_predicciones, setPredicciones] = useState<any[]>([]);
 
     const [partidosJugados, setPartidosJugados] = useState<any[]>([]);
 

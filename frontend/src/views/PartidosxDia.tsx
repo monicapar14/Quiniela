@@ -220,7 +220,7 @@ const Partidos = () => {
         }
     };
 
-    const obtenerClaseGrupo = (grupo) => {
+    const obtenerClaseGrupo = (grupo: any) => {
         const letra = grupo.replace('Grupo ', '').trim().toLowerCase();
         return `grupo-${letra}`;
     };
