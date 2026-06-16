@@ -4,6 +4,7 @@ import type { PartidosObtenidos } from "../Interfaces/partidosDisponibles"
 import { useNavigate } from 'react-router-dom'
 import Layout from '../components/Layout'
 import '../styles/partidosDia.css'
+import { banderas } from '../utils/banderas'
 
 const Partidos = () => {
 
@@ -405,17 +406,27 @@ const Partidos = () => {
                         <div className="modal-overlay">
                             <div className="modal-partido-predicciones">
                                 <div className="modal-header-predicciones">
-                                    <h2>
-                                        ⚽ Predicciones
-                                    </h2>
-
-                                    <p>
-                                        {partidoPredicciones.equipo_local}
-                                        {" vs "}
-                                        {partidoPredicciones.equipo_visitante}
-                                    </p>
+                                    <h2>⚽ Predicciones</h2>
+                                    <div className="modal-equipos">
+                                        <div className="modal-equipo">
+                                            <img src={banderas[partidoPredicciones.equipo_local]} alt="" />
+                                                {partidoPredicciones.equipo_local}
+                                        </div>
+                                        <span className="modal-vs">
+                                            {partidoPredicciones.goles_local ?? "-"} - {partidoPredicciones.goles_visitante ?? "-"}
+                                        </span>
+                                        <div className="modal-equipo">
+                                            {partidoPredicciones.equipo_visitante}
+                                            <img src={banderas[partidoPredicciones.equipo_visitante]} alt="" />
+                                        </div>
+                                    </div>
                                 </div>
 
+                                <div className="predicciones-tabla-header">
+                                    <span>Participante</span>
+                                    <span style={{textAlign: 'right'}}>Predicción</span>
+                                </div>
+                                
                                 {
                                     predicciones.length === 0 &&
                                     (
