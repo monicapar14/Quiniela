@@ -345,11 +345,12 @@
   padding: 10px 20px;
   background: rgba(255,255,255,0.05);
   border-bottom: 1px solid rgba(255,255,255,0.08);
-  color: #94a3b8;
+  color: #4b00ff;
   font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
+  background: #a8e645;
 }
 
 /* ===== LISTA ===== */
@@ -397,7 +398,9 @@
   display: flex;
   justify-content: center;
   border-top: 1px solid rgba(255,255,255,0.08);
-  background: rgba(255,255,255,0.03);
+  background-image: url('../img/fondo_pelota.png');
+  background-size: cover;
+  background-position: center;
 }
 
 /* ===== BOTÓN ===== */
