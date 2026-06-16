@@ -213,7 +213,8 @@ const PrediccionesParticipante = () => {
                     style={{
                         textAlign: "center",
                         marginBottom: "20px",
-                        marginTop: "30px"
+                        marginTop: "30px",
+                        color: "cyan"
                     }}
                 >
                     ⏳ Partidos por jugar
