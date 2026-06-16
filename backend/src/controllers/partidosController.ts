@@ -6,7 +6,7 @@ export const getInfoPartidos = async (req: Request, res: Response) => {
   try {
     const [rows] = await pool.query(`SELECT b.id, a.nombre as grup_nom, b.equipo_local, b.equipo_visitante, b.fecha, 
                                             b.goles_local, b.goles_visitante
-	                                      FROM quiniela.grupos a, quiniela.partidos b
+	                                      FROM grupos a, partidos b
                                         WHERE a.id = b.grupo_id
                                     order by fecha asc`)
     res.json(rows)
@@ -21,7 +21,7 @@ export const getPartidosxDia = async (req: Request, res: Response) => {
   try {
     const [rows] = await pool.query(`SELECT b.id, a.nombre as grup_nom, b.equipo_local, b.equipo_visitante, 
                                             b.fecha, b.goles_local, b.goles_visitante
-	                                      FROM quiniela.grupos a, quiniela.partidos b
+	                                      FROM grupos a, partidos b
                                         WHERE a.id = b.grupo_id
                                           AND DATE(b.fecha) = DATE(SYSDATE())
                                     order by fecha asc`)
@@ -108,7 +108,7 @@ const recalcularPartido = async (
 ) => {
 
   const [partidos]: any = await pool.query(`SELECT goles_local, goles_visitante
-                                              FROM quiniela.partidos
+                                              FROM partidos
                                               WHERE id = ?`,
     [partidoId]
   )
@@ -120,7 +120,7 @@ const recalcularPartido = async (
   const partido = partidos[0]
 
   const [predicciones]: any = await pool.query(`SELECT *
-                                                  FROM quiniela.predicciones
+                                                  FROM predicciones
                                                   WHERE partido_id = ?`,
     [partidoId]
   )
@@ -140,7 +140,7 @@ const recalcularPartido = async (
 
     await pool.query(
       `
-        INSERT INTO quiniela.puntajes_partido
+        INSERT INTO puntajes_partido
         (
           participante_id,
           partido_id,
@@ -168,7 +168,7 @@ const recalcularPartido = async (
 
     await pool.query(
       `
-        INSERT INTO quiniela.marcadores_acertados
+        INSERT INTO marcadores_acertados
         (
           participante_id,
           partido_id,
@@ -199,7 +199,7 @@ const recalcularPartido = async (
   const [participantes]: any =
     await pool.query(`
       SELECT id
-      FROM quiniela.participantes
+      FROM participantes
     `)
 
   for (const participante of participantes) {
@@ -210,7 +210,7 @@ const recalcularPartido = async (
           SELECT
             IFNULL(SUM(puntos),0)
             AS total
-          FROM quiniela.puntajes_partido
+          FROM puntajes_partido
           WHERE participante_id = ?
         `,
         [participante.id]
@@ -221,7 +221,7 @@ const recalcularPartido = async (
         `
           SELECT
             COUNT(*) AS total
-          FROM quiniela.marcadores_acertados
+          FROM marcadores_acertados
           WHERE participante_id = ?
           AND acerto_exacto = TRUE
         `,
@@ -230,7 +230,7 @@ const recalcularPartido = async (
 
     await pool.query(
       `
-        INSERT INTO quiniela.ranking
+        INSERT INTO ranking
         (
           participante_id,
           puntos_totales,
@@ -272,7 +272,7 @@ export const editarPartido = async (
       goles_visitante
     } = req.body
 
-    await pool.query(`UPDATE quiniela.partidos
+    await pool.query(`UPDATE partidos
                         SET goles_local = ?,
                             goles_visitante = ?
                         WHERE id = ?`,
