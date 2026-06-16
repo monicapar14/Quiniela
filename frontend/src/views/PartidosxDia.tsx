@@ -242,7 +242,22 @@ const Partidos = () => {
                             </div>
                             <div className="teams">                        
                                 <div className="team-name">
+                                    <img
+                                        src={
+                                            banderas[
+                                                partido.equipo_local
+                                            ]
+                                        }
+                                        alt=""
+                                        style={{
+                                            width: '35px',
+                                            height: '35px',
+                                            marginRight: '-5px'
+                                        }}
+                                    />
+
                                     {partido.equipo_local}
+
                                 </div>
                                 <div className="score">
                                     {partido.goles_local ?? "-"}
@@ -250,7 +265,22 @@ const Partidos = () => {
                                     {partido.goles_visitante ?? "-"}
                                 </div>
                                 <div className="team-name">
+                                    <img
+                                        src={
+                                            banderas[
+                                                partido.equipo_visitante
+                                            ]
+                                        }
+                                        alt=""
+                                        style={{
+                                            width: '35px',
+                                            height: '25px',
+                                            marginRight: '10px'
+                                        }}
+                                    />
+
                                     {partido.equipo_visitante}
+
                                 </div>
                             </div>
                             <div className="match-footer">
@@ -426,7 +456,7 @@ const Partidos = () => {
                                     <span>Participante</span>
                                     <span style={{textAlign: 'right'}}>Predicción</span>
                                 </div>
-                                
+
                                 {
                                     predicciones.length === 0 &&
                                     (
