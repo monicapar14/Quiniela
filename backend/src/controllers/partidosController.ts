@@ -23,7 +23,7 @@ export const getPartidosxDia = async (req: Request, res: Response) => {
                                             b.fecha, b.goles_local, b.goles_visitante
 	                                      FROM grupos a, partidos b
                                         WHERE a.id = b.grupo_id
-                                          AND DATE(b.fecha) = DATE(SYSDATE())
+                                          AND DATE(CONVERT_TZ(b.fecha, '+00:00', '-06:00')) = DATE(CONVERT_TZ(SYSDATE(), '+00:00', '-06:00'))
                                     order by fecha asc`)
     res.json(rows)
   } catch (error) {

@@ -1,18 +1,14 @@
 .participants-page {
   flex: 1;
   padding: 40px 20px;
-
   background-image: url('../img/fondoanio.png');
   background-repeat: repeat;
   background-position: center center;
   background-size: 200px;
-
   position: relative;
-
   display: flex;
   justify-content: center;
   align-items: center;
-
   overflow: hidden;
 }
 
@@ -52,6 +48,7 @@
   color: gold;
 }
 
+/* TABLA - solo en pantallas grandes */
 .participants-table {
   width: 100%;
   border-collapse: collapse;
@@ -81,11 +78,6 @@
 
 .participants-table tbody tr:hover td {
   background: #f1f5f9;
-}
-
-.participants-table th,
-.participants-table td {
-  width: 33.33%;
 }
 
 .points {
@@ -120,9 +112,59 @@
   background: #1f2937;
 }
 
-@media (max-width: 480px) {
-  .participants-page { padding: 20px 12px; align-items: flex-start; }
-  .participants-card { border-radius: 14px; }
-  .participants-header { padding: 18px 12px; }
-  .trophy { font-size: 28px; }
+/* MÓVIL - tarjetas en lugar de tabla */
+@media (max-width: 600px) {
+  .participants-page {
+    padding: 20px 12px;
+    align-items: flex-start;
+  }
+
+  .participants-card {
+    border-radius: 14px;
+  }
+
+  .participants-header {
+    padding: 18px 12px;
+  }
+
+  .trophy {
+    font-size: 28px;
+  }
+
+  .participants-table thead {
+    display: none;
+  }
+
+  .participants-table tbody tr {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #e5e7eb;
+    gap: 10px;
+  }
+
+  .participants-table td {
+    border: none;
+    padding: 2px 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  .participants-table td:first-child {
+    font-weight: 900;
+    font-size: 12px;
+    color: #6b7280;
+  }
+
+  .participants-table td:nth-child(2) {
+    font-weight: 700;
+    font-size: 16px;
+    color: #111827;
+  }
+
+  .worldcup-btn {
+    width: 100%;
+    justify-content: center;
+  }
 }
