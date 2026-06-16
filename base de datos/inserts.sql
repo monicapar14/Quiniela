@@ -1,9 +1,9 @@
 //Fases
-INSERT INTO `quiniela`.`fases` (`nombre`, `orden`) VALUES ('Fase de grupos', '1');
-INSERT INTO `quiniela`.`fases` (`nombre`, `orden`) VALUES ('Octavos de final', '2');
-INSERT INTO `quiniela`.`fases` (`nombre`, `orden`) VALUES ('Cuartos de final', '3');
-INSERT INTO `quiniela`.`fases` (`nombre`, `orden`) VALUES ('Semifinal', '4');
-INSERT INTO `quiniela`.`fases` (`nombre`, `orden`) VALUES ('Final', '5');
+INSERT INTO `fases` (`nombre`, `orden`) VALUES ('Fase de grupos', '1');
+INSERT INTO `fases` (`nombre`, `orden`) VALUES ('Octavos de final', '2');
+INSERT INTO `fases` (`nombre`, `orden`) VALUES ('Cuartos de final', '3');
+INSERT INTO `fases` (`nombre`, `orden`) VALUES ('Semifinal', '4');
+INSERT INTO `fases` (`nombre`, `orden`) VALUES ('Final', '5');
 
 //Grupos
 INSERT INTO grupos (fase_id, nombre) VALUES
@@ -21,24 +21,24 @@ INSERT INTO grupos (fase_id, nombre) VALUES
 (1, 'L');
 
 //participantes
-INSERT INTO `quiniela`.`participantes` (`id`, `nombre`) VALUES ('1', 'Ariel y María');
-INSERT INTO `quiniela`.`participantes` (`nombre`) VALUES ('Dania y Beto');
-INSERT INTO `quiniela`.`participantes` (`nombre`) VALUES ('Mónica');
-INSERT INTO `quiniela`.`participantes` (`nombre`) VALUES ('Keyla');
-INSERT INTO `quiniela`.`participantes` (`nombre`) VALUES ('Lisa y Checha');
-INSERT INTO `quiniela`.`participantes` (`nombre`) VALUES ('Julio');
-INSERT INTO `quiniela`.`participantes` (`nombre`) VALUES ('Alvaro');
-INSERT INTO `quiniela`.`participantes` (`nombre`) VALUES ('Mario');
-INSERT INTO `quiniela`.`participantes` (`nombre`) VALUES ('Hugo');
-INSERT INTO `quiniela`.`participantes` (`nombre`) VALUES ('Sonia');
-INSERT INTO `quiniela`.`participantes` (`nombre`) VALUES ('Saúl y Ale');
-INSERT INTO `quiniela`.`participantes` (`nombre`) VALUES ('Daniel');
-INSERT INTO `quiniela`.`participantes` (`nombre`) VALUES ('Janda y Marvin');
-INSERT INTO `quiniela`.`participantes` (`nombre`) VALUES ('Norma y Mara');
-INSERT INTO `quiniela`.`participantes` (`nombre`) VALUES ('Francis');
-INSERT INTO `quiniela`.`participantes` (`nombre`) VALUES ('Rony');
-INSERT INTO `quiniela`.`participantes` (`nombre`) VALUES ('Laura');
-INSERT INTO `quiniela`.`participantes` (`nombre`) VALUES ('Kevin');
+INSERT INTO `participantes` (`id`, `nombre`) VALUES ('1', 'Ariel y María');
+INSERT INTO `participantes` (`nombre`) VALUES ('Dania y Beto');
+INSERT INTO `participantes` (`nombre`) VALUES ('Mónica');
+INSERT INTO `participantes` (`nombre`) VALUES ('Keyla');
+INSERT INTO `participantes` (`nombre`) VALUES ('Lisa y Checha');
+INSERT INTO `participantes` (`nombre`) VALUES ('Julio');
+INSERT INTO `participantes` (`nombre`) VALUES ('Alvaro');
+INSERT INTO `participantes` (`nombre`) VALUES ('Mario');
+INSERT INTO `participantes` (`nombre`) VALUES ('Hugo');
+INSERT INTO `participantes` (`nombre`) VALUES ('Sonia');
+INSERT INTO `participantes` (`nombre`) VALUES ('Saúl y Ale');
+INSERT INTO `participantes` (`nombre`) VALUES ('Daniel');
+INSERT INTO `participantes` (`nombre`) VALUES ('Janda y Marvin');
+INSERT INTO `participantes` (`nombre`) VALUES ('Norma y Mara');
+INSERT INTO `participantes` (`nombre`) VALUES ('Francis');
+INSERT INTO `participantes` (`nombre`) VALUES ('Rony');
+INSERT INTO `participantes` (`nombre`) VALUES ('Laura');
+INSERT INTO `participantes` (`nombre`) VALUES ('Kevin');
 
 //partidos
 INSERT INTO partidos (fase_id, grupo_id, equipo_local, equipo_visitante, fecha) VALUES
@@ -148,9 +148,9 @@ INSERT INTO partidos (fase_id, grupo_id, equipo_local, equipo_visitante, fecha) 
 (1, 10, 'Argelia',       'Austria',      '2026-06-27 20:00:00'),
 (1, 10, 'Jordania',      'Argentina',    '2026-06-27 20:00:00');
 
-UPDATE `quiniela`.`partidos` SET `goles_local` = '2', `goles_visitante` = '0' WHERE (`id` = '1');
-UPDATE `quiniela`.`partidos` SET `goles_local` = '2', `goles_visitante` = '1' WHERE (`id` = '2');
-UPDATE `quiniela`.`partidos` SET `goles_local` = '1', `goles_visitante` = '1' WHERE (`id` = '3');
+UPDATE `partidos` SET `goles_local` = '2', `goles_visitante` = '0' WHERE (`id` = '1');
+UPDATE `partidos` SET `goles_local` = '2', `goles_visitante` = '1' WHERE (`id` = '2');
+UPDATE `partidos` SET `goles_local` = '1', `goles_visitante` = '1' WHERE (`id` = '3');
 
 //login
 INSERT INTO usuarios(nombre,password_hash,rol)
