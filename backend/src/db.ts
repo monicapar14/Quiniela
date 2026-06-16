@@ -3,15 +3,17 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-
-//pool para poder abrir varias conexiones a la base de datos al mismo tiempo, en lugar de abrir y cerrar una conexión cada vez que se hace una consulta
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
+  port: Number(process.env.DB_PORT),
   waitForConnections: true,
-  connectionLimit: 10,  
+  connectionLimit: 10,
+  ssl: {
+    rejectUnauthorized: true
+  }
 })
 
 export default pool
