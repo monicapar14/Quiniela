@@ -274,8 +274,8 @@ const Partidos = () => {
                                         alt=""
                                         style={{
                                             width: '35px',
-                                            height: '25px',
-                                            marginRight: '10px'
+                                            height: '35px',
+                                            marginRight: '-5px'
                                         }}
                                     />
 
