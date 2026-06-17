@@ -112,6 +112,14 @@
 .top3 { background: rgba(205, 127, 50, 0.10); }
 
 .position { font-size: 1.2rem; }
+.medal {
+    font-size: 1.5rem; /* tamaño de las medallas */
+}
+.position-number {
+    font-size: 1rem; /* tamaño de los números */
+    font-weight: bold;
+}
+
 .name { font-weight: 700; }
 
 @media (max-width: 480px) {

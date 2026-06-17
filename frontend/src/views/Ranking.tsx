@@ -59,10 +59,10 @@ const Participantes = () => {
                                         }
                                     >
                                         <td className="position">
-                                            {index === 0 && "🥇"}
-                                            {index === 1 && "🥈"}
-                                            {index === 2 && "🥉"}
-                                            {index > 2 && index + 1}
+                                            {index === 0 && <span className="medal">🥇</span>}
+                                            {index === 1 && <span className="medal">🥈</span>}
+                                            {index === 2 && <span className="medal">🥉</span>}
+                                            {index > 2 && <span className="position-number">{index + 1}</span>}
                                         </td>
                                         <td className="name">{ran.nombre}</td>                                            
                                         <td>
