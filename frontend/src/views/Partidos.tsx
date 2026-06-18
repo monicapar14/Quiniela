@@ -73,14 +73,31 @@ const Partidos = () => {
 
         try {
 
+            const local =
+                golesLocal === ""
+                    ? null
+                    : Number(golesLocal);
+
+            const visitante =
+                golesVisitante === ""
+                    ? null
+                    : Number(golesVisitante);
+
             await api.put(`/partidos/${partidoEditar.id}`,
                 {
-                    goles_local: golesLocal,
-                    goles_visitante: golesVisitante
+                    goles_local: local,
+                    goles_visitante: visitante
                 }
             );
 
-            setPartidos(
+            try {
+                const response = await api.get('/partidos')
+                setPartidos(response.data)
+            } catch (error) {
+                console.error('Error al obtener los partidos:', error)
+            }
+
+            /*setPartidos(
                 partidos.map((p) =>
                     p.id === partidoEditar.id
                         ? {
@@ -90,7 +107,7 @@ const Partidos = () => {
                         }
                         : p
                 )
-            );
+            );*/
 
             setMostrarModal(false);
 

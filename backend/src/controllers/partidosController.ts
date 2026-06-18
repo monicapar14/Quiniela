@@ -41,14 +41,8 @@ const calcularPuntos = (
 ) => {
 
   // Marcador exacto
-  if (
-    realLocal === predLocal &&
-    realVisitante === predVisitante
-  ) {
-    return {
-      puntos: 3,
-      exacto: true
-    }
+  if ((realLocal === predLocal) && (realVisitante === predVisitante)) {
+    return {puntos: 3, exacto: true}
   }
 
   const resultadoReal =
@@ -70,36 +64,21 @@ const calcularPuntos = (
     realVisitante === predVisitante
 
   // acertó resultado y un marcador
-  if (
-    resultadoReal === resultadoPred &&
-    unMarcador
-  ) {
-    return {
-      puntos: 2,
-      exacto: false
-    }
+  if ((resultadoReal === resultadoPred) && (unMarcador)) {
+    return {puntos: 2,exacto: false}
   }
 
   // solo acertó ganador o empate
   if (resultadoReal === resultadoPred) {
-    return {
-      puntos: 1,
-      exacto: false
-    }
+    return {puntos: 1, exacto: false}
   }
 
   // solo acertó un marcador
   if (unMarcador) {
-    return {
-      puntos: 1,
-      exacto: false
-    }
+    return {puntos: 1, exacto: false}
   }
 
-  return {
-    puntos: 0,
-    exacto: false
-  }
+  return {puntos: 0, exacto: false}
 }
 
 //Recalcular puntos del partido
@@ -118,6 +97,82 @@ const recalcularPartido = async (
   }
 
   const partido = partidos[0]
+
+  if (
+    partido.goles_local === null ||
+    partido.goles_visitante === null
+  ) {
+
+    await pool.query(
+      `DELETE FROM puntajes_partido
+        WHERE partido_id = ?`,
+      [partidoId]
+    )
+
+    await pool.query(
+      `DELETE FROM marcadores_acertados
+        WHERE partido_id = ?`,
+      [partidoId]
+    )
+
+    // Recalcular ranking completo
+    const [participantes]: any =
+      await pool.query(`
+        SELECT id
+        FROM participantes
+      `)
+
+    for (const participante of participantes) {
+
+      const [puntos]: any =
+        await pool.query(
+          `
+          SELECT IFNULL(SUM(puntos),0) total
+          FROM puntajes_partido
+          WHERE participante_id = ?
+          `,
+          [participante.id]
+        )
+
+      const [exactos]: any =
+        await pool.query(
+          `
+          SELECT COUNT(*) total
+          FROM marcadores_acertados
+          WHERE participante_id = ?
+          AND acerto_exacto = TRUE
+          `,
+          [participante.id]
+        )
+
+      await pool.query(
+        `
+        INSERT INTO ranking
+        (
+          participante_id,
+          puntos_totales,
+          exactos_totales
+        )
+        VALUES
+        (
+          ?,
+          ?,
+          ?
+        )
+        ON DUPLICATE KEY UPDATE
+          puntos_totales = VALUES(puntos_totales),
+          exactos_totales = VALUES(exactos_totales)
+        `,
+        [
+          participante.id,
+          puntos[0].total,
+          exactos[0].total
+        ]
+      )
+    }
+
+    return
+  }
 
   const [predicciones]: any = await pool.query(`SELECT *
                                                   FROM predicciones
@@ -277,8 +332,8 @@ export const editarPartido = async (
                             goles_visitante = ?
                         WHERE id = ?`,
       [
-        goles_local,
-        goles_visitante,
+        goles_local ?? null,
+        goles_visitante ?? null,
         id
       ]
     )
