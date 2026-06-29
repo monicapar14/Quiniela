@@ -80,24 +80,35 @@ export const editarPrediccion = async ( req: Request, res: Response) => {
 
         /*
         ===========================
-        Actualizar predicción
+        Insertar o actualizar predicción
         ===========================
         */
 
         await pool.query(
             `
-            UPDATE predicciones
-            SET
-                pred_goles_local=?,
-                pred_goles_visitante=?
-            WHERE participante_id=?
-                AND partido_id = ?
+            INSERT INTO predicciones
+            (
+                participante_id,
+                partido_id,
+                pred_goles_local,
+                pred_goles_visitante
+            )
+            VALUES
+            (
+                ?,
+                ?,
+                ?,
+                ?
+            )
+            ON DUPLICATE KEY UPDATE
+                pred_goles_local = VALUES(pred_goles_local),
+                pred_goles_visitante = VALUES(pred_goles_visitante)
             `,
             [
-                pred_goles_local,
-                pred_goles_visitante,
                 id,
-                partido_id
+                partido_id,
+                pred_goles_local,
+                pred_goles_visitante
             ]
         );
 
@@ -166,12 +177,6 @@ export const editarPrediccion = async ( req: Request, res: Response) => {
                     )
                 );
 
-            /*
-            ===========================
-            puntajes_partido
-            ===========================
-            */
-
             await pool.query(
                 `
                 INSERT INTO
@@ -200,12 +205,6 @@ export const editarPrediccion = async ( req: Request, res: Response) => {
                     resultado.puntos
                 ]
             );
-
-            /*
-            ===========================
-            marcadores_acertados
-            ===========================
-            */
 
             await pool.query(
                 `
@@ -237,13 +236,6 @@ export const editarPrediccion = async ( req: Request, res: Response) => {
                     resultado.exacto
                 ]
             );
-
-            /*
-            ===========================
-            Recalcular ranking
-            SOLO de esa persona
-            ===========================
-            */
 
             const [puntos]: any =
                 await pool.query(
@@ -331,7 +323,6 @@ export const editarPrediccion = async ( req: Request, res: Response) => {
 
     }
 };
-
 
 export const getPrediccionesParticipante = async (
     req: Request,
