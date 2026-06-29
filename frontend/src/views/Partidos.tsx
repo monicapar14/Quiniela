@@ -513,9 +513,9 @@ const Partidos = () => {
                                                         <span
                                                             className="marcador-prediccion"
                                                         >
-                                                            {p.pred_goles_local}
+                                                            {p.pred_goles_local ?? "-"}
                                                             {" - "}
-                                                            {p.pred_goles_visitante}
+                                                            {p.pred_goles_visitante ?? "-"}
                                                         </span>
 
                                                         {
