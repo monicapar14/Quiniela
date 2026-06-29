@@ -366,12 +366,13 @@ export const getPrediccionesPartido = async (
     
     const id = Number(req.params.id);
 
-    const [rows] = await pool.query(`SELECT a.id, a.nombre, b.partido_id, b.pred_goles_local, b.pred_goles_visitante
-                                       FROM participantes a, predicciones b
-                                       WHERE a.id = b.participante_id
+    const [rows] = await pool.query(`SELECT a.id, a.nombre, ? as partido_id, b.pred_goles_local, b.pred_goles_visitante
+                                       FROM participantes a
+                                       LEFT JOIN predicciones b 
+                                         ON a.id = b.participante_id 
                                          AND b.partido_id = ?
                                      ORDER BY a.id`,
-      [id]
+      [id, id]
     );
 
     res.json(rows);
