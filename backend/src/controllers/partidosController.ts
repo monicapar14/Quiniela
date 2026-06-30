@@ -18,7 +18,7 @@ export const getInfoPartidos = async (req: Request, res: Response) => {
                                     order by b.fase_id asc, b.fecha asc`)
     res.json(rows)
   } catch (error) {
-    console.error('Error al obtener los productos:', error)
+    console.error('Error al obtener los partidos:', error)
     res.status(500).json({ message: 'Error al obtener los productos' })
   }
 }

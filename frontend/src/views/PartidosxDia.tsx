@@ -244,13 +244,6 @@ const Partidos = () => {
     const esEmpate = golesLocal !== "" && golesVisitante !== "" &&
         Number(golesLocal) === Number(golesVisitante);
 
-    const ganadorAutomatico =
-        Number(golesLocal) > Number(golesVisitante)
-        ? "local"
-        : Number(golesVisitante) > Number(golesLocal)
-        ? "visitante"
-        : "";
-
     const obtenerClaseGrupo = (grupo: any) => {
         const letra = grupo.replace('Grupo ', '').trim().toLowerCase();
         return `grupo-${letra}`;

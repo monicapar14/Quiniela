@@ -51,7 +51,6 @@ const BracketPage = () => {
             const y1 = rect.top + rect.height / 2;
 
             const x2 = rect.right + 60;
-            const y2 = y1;
 
             const path = document.createElementNS(
                 "http://www.w3.org/2000/svg",
