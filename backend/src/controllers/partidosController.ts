@@ -4,18 +4,26 @@ import pool from '../db'
 //obtener toda la informacion de los partidos
 export const getInfoPartidos = async (req: Request, res: Response) => {
   try {
-    const [rows] = await pool.query(`SELECT b.id, a.nombre as grup_nom, f.nombre as fase_nom, b.equipo_local, b.equipo_visitante, 
-                                            b.fecha, b.goles_local, b.goles_visitante, b.fase_id,
-                                            CASE
-                                                WHEN b.goles_local = b.goles_visitante
-                                                    AND b.fase_id <> 1
-                                                THEN b.ganador
-                                                ELSE NULL
-                                            END AS ganador
-	                                      FROM grupos a, partidos b
-                                        JOIN fases f ON f.id = b.fase_id
-                                        WHERE a.id = b.grupo_id
-                                    order by b.fase_id asc, b.fecha asc`)
+    const [rows] = await pool.query(`SELECT 
+									    b.id, 
+									    a.nombre AS grup_nom, 
+									    f.nombre AS fase_nom, 
+									    b.equipo_local, 
+									    b.equipo_visitante, 
+									    b.fecha, 
+									    b.goles_local, 
+									    b.goles_visitante, 
+									    b.fase_id,
+									    CASE
+									        WHEN b.goles_local = b.goles_visitante
+									            AND b.fase_id <> 1
+									        THEN b.ganador
+									        ELSE NULL
+									    END AS ganador
+									FROM partidos b
+									JOIN fases f ON f.id = b.fase_id
+									LEFT JOIN grupos a ON a.id = b.grupo_id
+									ORDER BY b.fase_id ASC, b.fecha ASC`)
     res.json(rows)
   } catch (error) {
     console.error('Error al obtener los partidos:', error)
