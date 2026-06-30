@@ -18,10 +18,9 @@ interface Fase {
     partidos: Partido[];
 }
 
-const svgRef = useRef<SVGSVGElement | null>(null);
-
 const BracketPage = () => {
     const [fases, setFases] = useState<Fase[]>([]);
+    const svgRef = useRef<SVGSVGElement | null>(null);   // <-- AQUÍ, dentro del componente
 
     useEffect(() => {
         cargarBracket();
