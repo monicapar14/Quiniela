@@ -26,6 +26,10 @@ const Principal = () => {
                         <i className="fa-solid fa-ranking-star"></i>
                         <span>Ranking</span>
                     </div>
+                    {/*<div className="tile tile-red" onClick={() => navigate("/bracket")}>
+                        <h1>🏟️</h1>
+                        <span>Eliminatorias</span>
+                    </div>*/}
                 </div>
             </div>
         </Layout>        

@@ -1,0 +1,134 @@
+.bracket-page {
+  padding: 20px;
+  min-height: 100vh;
+  background: #f3f4f6;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* CONTENEDOR PRINCIPAL */
+.bracket {
+  display: flex;
+  align-items: center;
+  gap: 120px;
+  padding: 40px;
+  overflow-x: auto;
+}
+
+/* CADA RONDA */
+.round {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  min-height: 500px; /* clave para forma de torneo */
+  min-width: 260px;
+  position: relative;
+}
+
+.round-title {
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* LISTA DE PARTIDOS */
+.matches {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  flex: 1;
+  gap: 80px;
+}
+
+/* CARD PARTIDO */
+.match {
+  background: white;
+  border-radius: 14px;
+  padding: 12px;
+  width: 220px;
+  position: relative;
+  margin-bottom: 40px;
+
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  border: 1px solid #e5e7eb;
+}
+
+/* línea hacia la derecha */
+.match::after {
+  content: "";
+  position: absolute;
+  right: -30px;
+  top: 50%;
+  width: 30px;
+  height: 2px;
+  background: #d1d5db;
+}
+
+.match::before {
+  content: "";
+  position: absolute;
+  right: -30px;
+  top: 50%;
+  width: 2px;
+  height: 80px; /* esto conecta arriba/abajo */
+  background: #d1d5db;
+}
+
+/* EQUIPOS */
+.team {
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+/* GANADOR */
+.team.winner {
+  background: #dcfce7;
+  color: #166534;
+  font-weight: 700;
+}
+
+/* VS */
+.vs {
+  text-align: center;
+  font-size: 12px;
+  color: #9ca3af;
+  margin: 4px 0;
+}
+
+/* TAG GANADOR */
+.winner-tag {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #ef4444;
+  font-weight: 700;
+}
+
+/* CONEXIÓN VISUAL BASE (PREPARADO PARA LÍNEAS FUTURAS) */
+.match::after {
+  content: "";
+  position: absolute;
+  right: -40px;
+  top: 50%;
+  width: 40px;
+  height: 2px;
+  background: #d1d5db;
+}
+
+.bracket-wrapper {
+  position: relative;
+}
+
+.bracket-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}

@@ -26,6 +26,8 @@ const Partidos = () => {
 
     const [golesVisitante, setGolesVisitante] = useState<number | string>("");
 
+    const [ganador, setGanador] = useState("");
+
     const [mostrarPredicciones, setMostrarPredicciones] = useState(false);
 
     const [predicciones, setPredicciones] = useState<any[]>([]);
@@ -39,6 +41,8 @@ const Partidos = () => {
     const [nuevoLocal, setNuevoLocal] = useState<number | string>("");
 
     const [nuevoVisitante, setNuevoVisitante] = useState<number | string>("");
+
+    const [faseAbierta, setFaseAbierta] = useState<string | null>(null);
 
     useEffect(() => {
 
@@ -54,15 +58,29 @@ const Partidos = () => {
         obtenerPartidos()
     }, [])
 
-    const abrirModal = (
-        partido: PartidosObtenidos
-    ) => {
+    useEffect(() => {
+        if (partidos.length > 0) {
+
+            const fasesOrdenadas = Object.keys(
+                partidos.reduce((acc, p) => {
+                    acc[p.fase_nom] = true;
+                    return acc;
+                }, {} as Record<string, boolean>)
+            );
+
+            setFaseAbierta(fasesOrdenadas[fasesOrdenadas.length - 1]);
+        }
+    }, [partidos]);
+
+    const abrirModal = (partido: PartidosObtenidos) => {
 
         setPartidoEditar(partido);
 
         setGolesLocal(partido.goles_local ?? "");
 
         setGolesVisitante(partido.goles_visitante ?? "");
+
+        setGanador(partido.ganador ?? "");
 
         setMostrarModal(true);
     };
@@ -86,7 +104,13 @@ const Partidos = () => {
             await api.put(`/partidos/${partidoEditar.id}`,
                 {
                     goles_local: local,
-                    goles_visitante: visitante
+                    goles_visitante: visitante,
+                    ganador:
+                        local === visitante
+                            ? ganador
+                            : local! > visitante!
+                                ? partidoEditar.equipo_local
+                                : partidoEditar.equipo_visitante
                 }
             );
 
@@ -238,6 +262,16 @@ const Partidos = () => {
         }
     };
 
+    const esEmpate = golesLocal !== "" && golesVisitante !== "" &&
+        Number(golesLocal) === Number(golesVisitante);
+
+    const ganadorAutomatico =
+        Number(golesLocal) > Number(golesVisitante)
+        ? "local"
+        : Number(golesVisitante) > Number(golesLocal)
+        ? "visitante"
+        : "";
+
     const obtenerClaseGrupo = (grupo: any) => {
         const letra = grupo.replace('Grupo ', '').trim().toLowerCase();
         return `grupo-${letra}`;
@@ -251,103 +285,150 @@ const Partidos = () => {
                     <h1>Todos los Partidos</h1>
                 </div>
 
-                <div className="matches-grid">
-                    {partidos.map((partido, index) => (
-                        <div className="match-card" key={index}>
-                           <div className={`group-badge ${obtenerClaseGrupo(partido.grup_nom)}`}>
-                                Grupo {partido.grup_nom}
-                            </div>
-                            <div className="teams">                        
-                                <div className="team-name">
-                                    <img
-                                        src={
-                                            banderas[
-                                                partido.equipo_local
-                                            ]
+                {Object.entries(partidos.reduce((acc, partido) => {
+
+                        const fase = partido.fase_nom;
+                        if (!acc[fase]) acc[fase] = [];
+                            acc[fase].push(partido);
+                        return acc;
+
+                    }, {} as Record<string, PartidosObtenidos[]>)
+                ).map(([fase, lista]) => (
+
+                    <div
+                        key={fase}
+                        id={`fase-${fase}`}
+                        className={`fase-container ${
+                            faseAbierta === fase ? "active" : ""
+                        }`}
+                    >                          
+                        <div
+                            onClick={() => setFaseAbierta(prev => prev === fase ? null : fase)}
+                            className={`fase-header ${
+                                faseAbierta === fase ? "active" : ""
+                            }`}
+                        >
+                            <span className="fase-title">{fase}</span>
+
+                            <span className={`fase-arrow ${
+                                faseAbierta === fase ? "rotated" : ""
+                            }`}>
+                                ⌄
+                            </span>
+                        </div>
+
+                        <div
+                            className={`fase-content ${
+                                faseAbierta === fase ? "open" : "closed"
+                            }`}
+                        >
+                            <div className="matches-grid">
+                                {lista.map((partido, index) => (
+                                    <div className="match-card" key={index}>
+                                        <div className={`group-badge ${obtenerClaseGrupo(partido.grup_nom)}`}>
+                                            Grupo {partido.grup_nom}
+                                        </div>
+                                        <div className="teams">                        
+                                            <div className="team-name">
+                                                <img
+                                                    src={
+                                                        banderas[
+                                                            partido.equipo_local
+                                                        ]
+                                                    }
+                                                    alt=""
+                                                    style={{
+                                                        width: '35px',
+                                                        height: '35px',
+                                                        marginRight: '-5px'
+                                                    }}
+                                                />
+                                                    {partido.equipo_local}
+                                            </div>
+                                            <div className="score">
+                                                {partido.goles_local ?? "-"}
+                                                <span className="vs mx-3">vs</span>
+                                                {partido.goles_visitante ?? "-"}
+                                            </div>
+                                            <div className="team-name">
+                                                <img
+                                                    src={
+                                                        banderas[
+                                                            partido.equipo_visitante
+                                                        ]
+                                                    }
+                                                    alt=""
+                                                    style={{
+                                                        width: '35px',
+                                                        height: '35px',
+                                                        marginRight: '-5px'
+                                                    }}
+                                                />
+                                                    {partido.equipo_visitante}
+                                            </div>
+                                        </div>
+                                        <div className="match-footer">
+                                            <span>
+                                                <i className="fa-solid fa-calendar-days me-1"></i>
+                                                {new Date(partido.fecha).toLocaleDateString('es-ES')}
+                                            </span>
+                                            <span>
+                                                <i className="fa-solid fa-clock me-1"></i>
+                                                {new Date(partido.fecha).toLocaleTimeString('es-ES', {
+                                                    hour: '2-digit',
+                                                    minute: '2-digit'
+                                                })}
+                                            </span>
+                                        </div>
+                                        {partido.ganador && (
+                                            <div
+                                                style={{
+                                                    marginTop: "10px",
+                                                    textAlign: "center",
+                                                    fontWeight: "bold",
+                                                    color: "#6000c9"
+                                                }}
+                                            >
+                                                🏆 Ganador: {partido.ganador}
+                                            </div>
+                                        )}
+                                        {
+                                            esAdmin && (
+                                                <div
+                                                    style={{
+                                                        marginTop: '15px',
+                                                        textAlign: 'center'
+                                                    }}
+                                                >
+                                                    <button
+                                                        className="worldcup-btn"
+                                                        onClick={() =>
+                                                            abrirModal(partido)
+                                                        }
+                                                    >           
+                                                        <i className="fa-solid fa-pen me-2"></i>
+                                                        Editar Resultado
+                                                    </button>
+                                                </div>
+                                            )
                                         }
-                                        alt=""
-                                        style={{
-                                            width: '35px',
-                                            height: '35px',
-                                            marginRight: '-5px'
-                                        }}
-                                    />
-
-                                    {partido.equipo_local}
-
-                                </div>
-                                <div className="score">
-                                    {partido.goles_local ?? "-"}
-                                    <span className="vs mx-3">vs</span>
-                                    {partido.goles_visitante ?? "-"}
-                                </div>
-                                <div className="team-name">
-                                    <img
-                                        src={
-                                            banderas[
-                                                partido.equipo_visitante
-                                            ]
-                                        }
-                                        alt=""
-                                        style={{
-                                            width: '35px',
-                                            height: '35px',
-                                            marginRight: '-5px'
-                                        }}
-                                    />
-
-                                    {partido.equipo_visitante}
-
-                                </div>
-                            </div>
-                            <div className="match-footer">
-                                <span>
-                                    <i className="fa-solid fa-calendar-days me-1"></i>
-                                    {new Date(partido.fecha).toLocaleDateString('es-ES')}
-                                </span>
-                                <span>
-                                    <i className="fa-solid fa-clock me-1"></i>
-                                    {new Date(partido.fecha).toLocaleTimeString('es-ES', {
-                                    hour: '2-digit',
-                                    minute: '2-digit'
-                                    })}
-                                </span>
-                            </div>
-                            {
-                                esAdmin && (
-                                    <div
-                                        style={{
-                                            marginTop: '15px',
-                                            textAlign: 'center'
-                                        }}
-                                    >
-                                        <button
-                                            className="worldcup-btn"
-                                            onClick={() =>
-                                                abrirModal(partido)
-                                            }
-                                        >
-                                            <i className="fa-solid fa-pen me-2"></i>
-                                            Editar Resultado
-                                        </button>
+                                        <div style={{ marginTop: '10px', textAlign: 'center'}}>
+                                            <button
+                                                className="worldcup-btn"
+                                                onClick={() =>
+                                                    verPredicciones(partido)
+                                                }
+                                            >
+                                                <i className="fa-solid fa-eye me-2"></i>
+                                                Ver Predicciones
+                                            </button>
+                                        </div>                                                                                    
                                     </div>
-                                )
-                            }
-                            <div style={{ marginTop: '10px', textAlign: 'center'}}>
-                                <button
-                                    className="worldcup-btn"
-                                    onClick={() =>
-                                        verPredicciones(partido)
-                                    }
-                                >
-                                    <i className="fa-solid fa-eye me-2"></i>
-                                    Ver Predicciones
-                                </button>
+                                ))}
                             </div>
                         </div>
-                    ))}
-                </div>
-
+                    </div>
+                ))}
                 <div className="back-btn">
                     <button
                         className="worldcup-btn"
@@ -408,6 +489,37 @@ const Partidos = () => {
                                         placeholder="Visitante"
                                     />
 
+                                </div>
+
+                                <div
+                                    style={{
+                                        marginTop: "20px",
+                                        textAlign: "center"
+                                    }}
+                                >
+                                    {partidoEditar.fase_id !== 1 && esEmpate && (
+                                        <div className="winner-wrapper">
+                                            <p className="winner-title">Seleccione el ganador</p>
+
+                                            <div className="winner-toggle">
+                                            <button
+                                                type="button"
+                                                className={`winner-btn ${ganador === partidoEditar.equipo_local ? "active" : ""}`}
+                                                onClick={() => setGanador(partidoEditar.equipo_local)}
+                                            >
+                                                {partidoEditar.equipo_local}
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                className={`winner-btn ${ganador === partidoEditar.equipo_visitante ? "active" : ""}`}
+                                                onClick={() => setGanador(partidoEditar.equipo_visitante)}
+                                            >
+                                                {partidoEditar.equipo_visitante}
+                                            </button>
+                                            </div>
+                                        </div>
+                                        )}
                                 </div>
 
                                 <div

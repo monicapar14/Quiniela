@@ -5,8 +5,11 @@ export interface PartidosObtenidos {
   equipo_visitante: string;
   precio: number;
   fecha: Date;
-  goles_local: number;
-  goles_visitante: number;
+  goles_local: number | null;
+  goles_visitante: number | null;
+  ganador: string | null;
+  fase_id: number;
+  fase_nom: string;
 }
 
 export interface DescuentosDisponibles {

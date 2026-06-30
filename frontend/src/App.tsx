@@ -6,6 +6,7 @@ import PartidosxDia from './views/PartidosxDia'
 import Ranking from './views/Ranking'
 import Login from './views/Login'
 import PrediccionesParticipante from './views/PrediccionesParticipante'
+import BracketPage from './views/BreakScreen'
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/ranking" element={<Ranking />} />
         <Route path="/login" element={<Login />} />
         <Route path="/participante/:id/predicciones" element={<PrediccionesParticipante />} />
+        <Route path="/bracket" element={<BracketPage />} />
       </Routes>
     </BrowserRouter>
   )

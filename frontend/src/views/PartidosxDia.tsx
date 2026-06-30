@@ -26,6 +26,8 @@ const Partidos = () => {
 
     const [golesVisitante, setGolesVisitante] = useState<number | string>("");
 
+    const [ganador, setGanador] = useState("");
+
     const [mostrarPredicciones, setMostrarPredicciones] = useState(false);
 
     const [predicciones, setPredicciones] = useState<any[]>([]);
@@ -64,6 +66,8 @@ const Partidos = () => {
 
         setGolesVisitante(partido.goles_visitante ?? "");
 
+        setGanador(partido.ganador ?? "");
+
         setMostrarModal(true);
     };
 
@@ -73,10 +77,26 @@ const Partidos = () => {
 
         try {
 
+            const local =
+                golesLocal === ""
+                    ? null
+                    : Number(golesLocal);
+
+            const visitante =
+                golesVisitante === ""
+                    ? null
+                    : Number(golesVisitante);
+
             await api.put(`/partidos/${partidoEditar.id}`,
                 {
-                    goles_local: golesLocal,
-                    goles_visitante: golesVisitante
+                    goles_local: local,
+                    goles_visitante: visitante,
+                    ganador:
+                        local === visitante
+                            ? ganador
+                            : local! > visitante!
+                                ? partidoEditar.equipo_local
+                                : partidoEditar.equipo_visitante
                 }
             );
 
@@ -221,6 +241,16 @@ const Partidos = () => {
         }
     };
 
+    const esEmpate = golesLocal !== "" && golesVisitante !== "" &&
+        Number(golesLocal) === Number(golesVisitante);
+
+    const ganadorAutomatico =
+        Number(golesLocal) > Number(golesVisitante)
+        ? "local"
+        : Number(golesVisitante) > Number(golesLocal)
+        ? "visitante"
+        : "";
+
     const obtenerClaseGrupo = (grupo: any) => {
         const letra = grupo.replace('Grupo ', '').trim().toLowerCase();
         return `grupo-${letra}`;
@@ -296,6 +326,18 @@ const Partidos = () => {
                                     })}
                                 </span>
                             </div>
+                            {partido.ganador && (
+                                <div
+                                    style={{
+                                        marginTop: "10px",
+                                        textAlign: "center",
+                                        fontWeight: "bold",
+                                        color: "#6000c9"
+                                   }}
+                                >
+                                    🏆 Ganador: {partido.ganador}
+                                </div>
+                            )}
                             {
                                 esAdmin && (
                                     <div
@@ -390,6 +432,39 @@ const Partidos = () => {
                                         }
                                         placeholder="Visitante"
                                     />
+
+                                </div>
+
+                                <div
+                                    style={{
+                                        marginTop: "20px",
+                                        textAlign: "center"
+                                    }}
+                                >
+
+                                {partidoEditar.fase_id !== 1 && esEmpate && (
+                                    <div className="winner-wrapper">
+                                        <p className="winner-title">Seleccione el ganador</p>
+
+                                        <div className="winner-toggle">
+                                        <button
+                                            type="button"
+                                            className={`winner-btn ${ganador === partidoEditar.equipo_local ? "active" : ""}`}
+                                            onClick={() => setGanador(partidoEditar.equipo_local)}
+                                        >
+                                            {partidoEditar.equipo_local}
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            className={`winner-btn ${ganador === partidoEditar.equipo_visitante ? "active" : ""}`}
+                                            onClick={() => setGanador(partidoEditar.equipo_visitante)}
+                                        >
+                                            {partidoEditar.equipo_visitante}
+                                        </button>
+                                        </div>
+                                    </div>
+                                    )}
 
                                 </div>
 
