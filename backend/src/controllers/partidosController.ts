@@ -23,7 +23,7 @@ export const getInfoPartidos = async (req: Request, res: Response) => {
 									FROM partidos b
 									JOIN fases f ON f.id = b.fase_id
 									LEFT JOIN grupos a ON a.id = b.grupo_id
-									ORDER BY b.orden ASC, b.fecha ASC`)
+									ORDER BY f.orden ASC, b.fecha ASC`)
     res.json(rows)
   } catch (error) {
     console.error('Error al obtener los partidos:', error)
