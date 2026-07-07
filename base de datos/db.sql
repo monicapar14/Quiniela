@@ -37,6 +37,8 @@ CREATE TABLE partidos (
     goles_local INT NULL,
     goles_visitante INT NULL,
 
+    ganador VARCHAR(100),
+
     FOREIGN KEY (fase_id) REFERENCES fases(id),
     FOREIGN KEY (grupo_id) REFERENCES grupos(id)
 );

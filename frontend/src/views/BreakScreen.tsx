@@ -1,6 +1,6 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Layout from "../components/Layout";
-import api from "../api"
+import useApi from "../hooks/useApi"
 import '../styles/break.css'
 
 interface Partido {
@@ -19,21 +19,8 @@ interface Fase {
 }
 
 const BracketPage = () => {
-    const [fases, setFases] = useState<Fase[]>([]);
-    const svgRef = useRef<SVGSVGElement | null>(null);   // <-- AQUÍ, dentro del componente
-
-    useEffect(() => {
-        cargarBracket();
-    }, []);
-
-    const cargarBracket = async () => {
-        try {
-            const res = await api.get("/partidos/getBracket");
-            setFases(res.data);
-        } catch (error) {
-            console.error("Error cargando bracket", error);
-        }
-    };
+    const { data: fases, loading, error } = useApi<Fase[]>("/partidos/getBracket");
+    const svgRef = useRef<SVGSVGElement | null>(null);
 
     const drawLines = () => {
         const svg = svgRef.current;
@@ -82,50 +69,69 @@ const BracketPage = () => {
             <div className="bracket-page">
                 <h1 className="title">🏟️ Eliminatorias</h1>
 
-                <div className="bracket-wrapper">
-                <div className="bracket">
-                    {fases
-                        .filter((fase) => fase.id !== 1)
-                        .map((fase) => (
-                            <div key={fase.id} className="round">
-                                <h3 className="round-title">{fase.nombre}</h3>
+                {loading && (
+                    <div className="text-center py-5">
+                        <div className="spinner-border text-light" role="status">
+                            <span className="visually-hidden">Cargando...</span>
+                        </div>
+                        <p className="text-light mt-2">Cargando eliminatorias...</p>
+                    </div>
+                )}
 
-                                <div className="matches">
-                                    {fase.partidos.map((p) => (
-                                        <div key={p.id} className="match">
-                                            <div
-                                                className={`team ${
-                                                    p.ganador === p.equipo_local ? "winner" : ""
-                                                }`}
-                                            >
-                                                {p.equipo_local}
+                {error && (
+                    <div className="alert alert-danger text-center mx-3" role="alert">
+                        {error}
+                    </div>
+                )}
+
+                {!loading && !error && fases && (
+                    <>
+                        <div className="bracket-wrapper">
+                            <div className="bracket">
+                                {fases
+                                    .filter((fase) => fase.id !== 1)
+                                    .map((fase) => (
+                                        <div key={fase.id} className="round">
+                                            <h3 className="round-title">{fase.nombre}</h3>
+
+                                            <div className="matches">
+                                                {fase.partidos.map((p) => (
+                                                    <div key={p.id} className="match">
+                                                        <div
+                                                            className={`team ${
+                                                                p.ganador === p.equipo_local ? "winner" : ""
+                                                            }`}
+                                                        >
+                                                            {p.equipo_local}
+                                                        </div>
+
+                                                        <div className="vs">vs</div>
+
+                                                        <div
+                                                            className={`team ${
+                                                                p.ganador === p.equipo_visitante ? "winner" : ""
+                                                            }`}
+                                                        >
+                                                            {p.equipo_visitante}
+                                                        </div>
+
+                                                        {p.ganador && (
+                                                            <div className="winner-tag">
+                                                                🏆 {p.ganador}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                ))}
                                             </div>
-
-                                            <div className="vs">vs</div>
-
-                                            <div
-                                                className={`team ${
-                                                    p.ganador === p.equipo_visitante ? "winner" : ""
-                                                }`}
-                                            >
-                                                {p.equipo_visitante}
-                                            </div>
-
-                                            {p.ganador && (
-                                                <div className="winner-tag">
-                                                    🏆 {p.ganador}
-                                                </div>
-                                            )}
                                         </div>
-                                    ))}
-                                </div>
+                                    ))
+                                }
                             </div>
-                        ))
-                    }
-                </div>
+                        </div>
+                        <svg ref={svgRef} className="bracket-svg"></svg>
+                    </>
+                )}
             </div>
-            <svg ref={svgRef} className="bracket-svg"></svg>
-        </div>
     </Layout>
   );
 };

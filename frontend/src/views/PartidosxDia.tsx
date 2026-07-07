@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import api from "../api"
+import useApi from "../hooks/useApi"
 import type { PartidosObtenidos } from "../Interfaces/partidosDisponibles"
 import { useNavigate } from 'react-router-dom'
 import Layout from '../components/Layout'
@@ -16,7 +17,7 @@ const Partidos = () => {
 
     const esAdmin = usuario?.rol === "admin";
 
-    const [partidos, setPartidos] = useState<PartidosObtenidos[]>([]);
+    const { data: partidos, loading, error, refetch } = useApi<PartidosObtenidos[]>('/partidos/partidosxDia');
 
     const [mostrarModal, setMostrarModal] = useState(false);
 
@@ -41,20 +42,6 @@ const Partidos = () => {
     const [nuevoLocal, setNuevoLocal] = useState<number | string>("");
 
     const [nuevoVisitante, setNuevoVisitante] = useState<number | string>("");
-
-    useEffect(() => {
-
-        const obtenerPartidos = async () => {
-            try {
-                const response = await api.get('/partidos/partidosxDia')
-                setPartidos(response.data)
-            } catch (error) {
-                console.error('Error al obtener los partidos:', error)
-            }
-        }
-
-        obtenerPartidos()
-    }, [])
 
     const abrirModal = (
         partido: PartidosObtenidos
@@ -100,17 +87,7 @@ const Partidos = () => {
                 }
             );
 
-            setPartidos(
-                partidos.map((p) =>
-                    p.id === partidoEditar.id
-                        ? {
-                            ...p,
-                            goles_local: Number(golesLocal),
-                            goles_visitante: Number(golesVisitante)
-                        }
-                        : p
-                )
-            );
+            refetch();
 
             setMostrarModal(false);
 
@@ -257,8 +234,24 @@ const Partidos = () => {
                     <h1>Partidos del Día</h1>
                 </div>
 
-                <div className="matches-grid">
-                    {partidos.map((partido, index) => (
+                {loading && (
+                    <div className="text-center py-5">
+                        <div className="spinner-border text-light" role="status">
+                            <span className="visually-hidden">Cargando...</span>
+                        </div>
+                        <p className="text-light mt-2">Cargando partidos del día...</p>
+                    </div>
+                )}
+
+                {error && (
+                    <div className="alert alert-danger text-center mx-3" role="alert">
+                        {error}
+                    </div>
+                )}
+
+                {!loading && !error && (
+                    <div className="matches-grid">
+                        {partidos?.map((partido, index) => (
                         <div className="match-card" key={index}>
                            <div className={`group-badge ${obtenerClaseGrupo(partido.grup_nom)}`}>
                                 Grupo {partido.grup_nom}
@@ -365,6 +358,7 @@ const Partidos = () => {
                         </div>
                     ))}
                 </div>
+                )}
 
                 <div className="back-btn">
                     <button

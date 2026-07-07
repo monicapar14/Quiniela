@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import api from "../api"
+import useApi from "../hooks/useApi"
 import type { PartidosObtenidos } from "../Interfaces/partidosDisponibles"
 import { useNavigate } from 'react-router-dom'
 import Layout from '../components/Layout'
@@ -16,7 +17,7 @@ const Partidos = () => {
 
     const esAdmin = usuario?.rol === "admin";
 
-    const [partidos, setPartidos] = useState<PartidosObtenidos[]>([]);
+    const { data: partidos, loading, error, refetch } = useApi<PartidosObtenidos[]>('/partidos');
 
     const [mostrarModal, setMostrarModal] = useState(false);
 
@@ -45,21 +46,7 @@ const Partidos = () => {
     const [faseAbierta, setFaseAbierta] = useState<string | null>(null);
 
     useEffect(() => {
-
-        const obtenerPartidos = async () => {
-            try {
-                const response = await api.get('/partidos')
-                setPartidos(response.data)
-            } catch (error) {
-                console.error('Error al obtener los partidos:', error)
-            }
-        }
-
-        obtenerPartidos()
-    }, [])
-
-    useEffect(() => {
-        if (partidos.length > 0) {
+        if (partidos && partidos.length > 0) {
 
             const fasesOrdenadas = Object.keys(
                 partidos.reduce((acc, p) => {
@@ -114,24 +101,7 @@ const Partidos = () => {
                 }
             );
 
-            try {
-                const response = await api.get('/partidos')
-                setPartidos(response.data)
-            } catch (error) {
-                console.error('Error al obtener los partidos:', error)
-            }
-
-            /*setPartidos(
-                partidos.map((p) =>
-                    p.id === partidoEditar.id
-                        ? {
-                            ...p,
-                            goles_local: Number(golesLocal),
-                            goles_visitante: Number(golesVisitante)
-                        }
-                        : p
-                )
-            );*/
+            refetch();
 
             setMostrarModal(false);
 
@@ -278,7 +248,22 @@ const Partidos = () => {
                     <h1>Todos los Partidos</h1>
                 </div>
 
-                {Object.entries(partidos.reduce((acc, partido) => {
+                {loading && (
+                    <div className="text-center py-5">
+                        <div className="spinner-border text-light" role="status">
+                            <span className="visually-hidden">Cargando...</span>
+                        </div>
+                        <p className="text-light mt-2">Cargando partidos...</p>
+                    </div>
+                )}
+
+                {error && (
+                    <div className="alert alert-danger text-center mx-3" role="alert">
+                        {error}
+                    </div>
+                )}
+
+                {!loading && !error && partidos && Object.entries(partidos.reduce((acc, partido) => {
 
                         const fase = partido.fase_nom;
                         if (!acc[fase]) acc[fase] = [];
