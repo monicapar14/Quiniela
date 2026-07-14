@@ -76,7 +76,7 @@ const PrediccionesFinales = () => {
                                                             ? "emoji-correct"
                                                             : "emoji-incorrect"
                                                     }
-                                                    data-tooltip={!!pred.status_primer_lugar ? "Sigue en competencia" : "Eliminado"}
+                                                    data-tooltip={!!pred.status_primer_lugar ? "Posible" : "Descartado"}
                                                     tabIndex={0}
                                                     style={{ "--i": 1 } as React.CSSProperties}
                                                 >
@@ -95,7 +95,7 @@ const PrediccionesFinales = () => {
                                                             ? "emoji-correct"
                                                             : "emoji-incorrect"
                                                     }
-                                                    data-tooltip={!!pred.status_segundo_lugar ? "Sigue en competencia" : "Eliminado"}
+                                                    data-tooltip={!!pred.status_segundo_lugar ? "Posible" : "Descartado"}
                                                     tabIndex={0}
                                                     style={{ "--i": 2 } as React.CSSProperties}
                                                 >
@@ -114,7 +114,7 @@ const PrediccionesFinales = () => {
                                                             ? "emoji-correct"
                                                             : "emoji-incorrect"
                                                     }
-                                                    data-tooltip={!!pred.status_tercer_lugar ? "Sigue en competencia" : "Eliminado"}
+                                                    data-tooltip={!!pred.status_tercer_lugar ? "Posible" : "Descartado"}
                                                     tabIndex={0}
                                                     style={{ "--i": 3 } as React.CSSProperties}
                                                 >

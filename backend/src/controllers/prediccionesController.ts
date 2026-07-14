@@ -378,25 +378,26 @@ export const getPrediccionesParticipante = async (
 
 export const finales = async (req: Request, res: Response) => {
     try {
-        const [rows] = await pool.query(`SELECT p.nombre AS participante, pf.primer_lugar_id,
+        const [rows] = await pool.query(`SELECT p.nombre AS participante,
+                                                pf.primer_lugar_id,
                                                 (SELECT pa.nombre
                                                     FROM paises pa
                                                     WHERE pa.id = pf.primer_lugar_id) AS primer_lugar,
-                                                (SELECT pa.activo
+                                                (SELECT pa.puede_ser_primero
                                                     FROM paises pa
                                                     WHERE pa.id = pf.primer_lugar_id) AS status_primer_lugar,
                                                 pf.segundo_lugar_id,
                                                 (SELECT pa.nombre
                                                     FROM paises pa
                                                     WHERE pa.id = pf.segundo_lugar_id) AS segundo_lugar,
-                                                (SELECT pa.activo
+                                                (SELECT pa.puede_ser_segundo
                                                     FROM paises pa
                                                     WHERE pa.id = pf.segundo_lugar_id) AS status_segundo_lugar,
                                                 pf.tercer_lugar_id,
                                                 (SELECT pa.nombre
                                                     FROM paises pa
                                                     WHERE pa.id = pf.tercer_lugar_id) AS tercer_lugar,
-                                                (SELECT pa.activo
+                                                (SELECT pa.puede_ser_tercero
                                                     FROM paises pa
                                                     WHERE pa.id = pf.tercer_lugar_id) AS status_tercer_lugar
                                             FROM participantes p, predicciones_finales pf

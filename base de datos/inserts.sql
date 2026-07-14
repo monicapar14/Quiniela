@@ -249,3 +249,36 @@ insert into predicciones_finales (participante_id, primer_lugar_id, segundo_luga
 insert into predicciones_finales (participante_id, primer_lugar_id, segundo_lugar_id, tercer_lugar_id) values (16, 17, 6, 19);
 insert into predicciones_finales (participante_id, primer_lugar_id, segundo_lugar_id, tercer_lugar_id) values (17, 17, 19, 13);
 insert into predicciones_finales (participante_id, primer_lugar_id, segundo_lugar_id, tercer_lugar_id) values (18, 19, 17, 6);
+
+
+//agregar posibilidad de lugar
+ALTER TABLE paises
+ADD COLUMN puede_ser_primero BOOLEAN DEFAULT FALSE,
+ADD COLUMN puede_ser_segundo BOOLEAN DEFAULT FALSE,
+ADD COLUMN puede_ser_tercero BOOLEAN DEFAULT FALSE;
+
+
+UPDATE paises
+SET
+    puede_ser_primero = TRUE,
+    puede_ser_segundo = TRUE,
+    puede_ser_tercero = TRUE
+WHERE id = 19;
+
+UPDATE paises
+SET
+    puede_ser_primero = TRUE,
+    puede_ser_segundo = TRUE
+WHERE id = 13;
+
+UPDATE paises
+SET
+    puede_ser_primero = TRUE,
+    puede_ser_segundo = TRUE,
+    puede_ser_tercero = TRUE
+WHERE id = 22;
+
+UPDATE paises
+SET
+    puede_ser_tercero = TRUE
+WHERE id = 17;
