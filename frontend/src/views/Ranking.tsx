@@ -50,7 +50,9 @@ const Participantes = () => {
                                     {top3[1].puntos_totales} pts
                                 </div>
                             </div>
-
+                            <div className="podium-exactos">
+                                🎯 {top3[1].exactos_totales} exactos
+                            </div>
                             <div className="podium-bar bar-first">
                                 2
                             </div>
@@ -71,7 +73,9 @@ const Participantes = () => {
                                     {top3[0].puntos_totales} pts
                                 </div>
                             </div>
-
+                            <div className="podium-exactos">
+                                🎯 {top3[0].exactos_totales} exactos
+                            </div>
                             <div className="podium-bar bar-first">
                                 1
                             </div>
@@ -92,7 +96,9 @@ const Participantes = () => {
                                     {top3[2].puntos_totales} pts
                                 </div>
                             </div>
-
+                            <div className="podium-exactos">
+                                🎯 {top3[2].exactos_totales} exactos
+                            </div>
                             <div className="podium-bar bar-first">
                                 3
                             </div>

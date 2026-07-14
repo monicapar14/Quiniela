@@ -276,3 +276,12 @@
   font-size: 1.2rem;
   animation: pelotaGiro 3s linear infinite;
 }
+
+.podium-exactos {
+    margin-bottom: 8px;
+    font-size: clamp(10px, 1.5vw, 13px);
+    font-weight: 700;
+    color: white;
+    text-align: center;
+    white-space: nowrap;
+}
