@@ -127,7 +127,9 @@ const Participantes = () => {
                                         <td className="position">
                                             <span className="position-number">{index + 4}</span>
                                         </td>
-                                        <td className="pred-nombre">{ran.nombre}</td>                                            
+                                        <td >
+                                            <span className="pred-nombre">{ran.nombre}</span>
+                                        </td>                                            
                                         <td>
                                             <span className="points">{ran.puntos_totales}</span>
                                         </td>                                            

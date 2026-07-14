@@ -60,8 +60,10 @@ const PrediccionesFinales = () => {
                                                 : ""
                                         }
                                     >
-                                        <td className="pred-nombre">
-                                            {pred.participante}
+                                        <td >
+                                            <span className="pred-nombre">
+                                                {pred.participante}
+                                            </span>
                                         </td>
                                         <td>
                                             <span className="pred-equipo">
