@@ -30,6 +30,11 @@ const Principal = () => {
                         <h1>🏟️</h1>
                         <span>Eliminatorias</span>
                     </div>*/}
+                    <div className="tile tile-gold" onClick={() => navigate("/prediccionesFinales")}>
+                        <h1>🏆 ⭐</h1>
+                        <span>Predicciones Países</span>
+                        <span>Finalistas</span>
+                    </div>
                 </div>
             </div>
         </Layout>        

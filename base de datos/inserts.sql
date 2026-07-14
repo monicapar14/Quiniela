@@ -176,3 +176,76 @@ ADD UNIQUE(participante_id, partido_id);
 
 ALTER TABLE ranking
 ADD UNIQUE(participante_id);
+
+
+/*paises*/
+insert into paises (nombre, activo) values ('México', false);
+insert into paises (nombre, activo) values ('Corea del Sur', false);
+insert into paises (nombre, activo) values ('Canadá', false);
+insert into paises (nombre, activo) values ('USA', false);
+insert into paises (nombre, activo) values ('Qatar', false);
+insert into paises (nombre, activo) values ('Brasil', false);
+insert into paises (nombre, activo) values ('Haití', false);
+insert into paises (nombre, activo) values ('Australia', false);
+insert into paises (nombre, activo) values ('Alemania', false);
+insert into paises (nombre, activo) values ('Países Bajos', false);
+insert into paises (nombre, activo) values ('Costa de Marfil', false);
+insert into paises (nombre, activo) values ('Suecia', false);
+insert into paises (nombre, activo) values ('España', true);
+insert into paises (nombre, activo) values ('Bélgica', false);
+insert into paises (nombre, activo) values ('Arabia Saudita', false);
+insert into paises (nombre, activo) values ('Irán', false);
+insert into paises (nombre, activo) values ('Francia', true);
+insert into paises (nombre, activo) values ('Irak', false);
+insert into paises (nombre, activo) values ('Argentina', true);
+insert into paises (nombre, activo) values ('Austria', false);
+insert into paises (nombre, activo) values ('Portugal', false);
+insert into paises (nombre, activo) values ('Inglaterra', true);
+insert into paises (nombre, activo) values ('Ghana', false);
+insert into paises (nombre, activo) values ('Uzbekistán', false);
+insert into paises (nombre, activo) values ('Chequia', false);
+insert into paises (nombre, activo) values ('Suiza', false);
+insert into paises (nombre, activo) values ('Escocia', false);
+insert into paises (nombre, activo) values ('Turquía', false);
+insert into paises (nombre, activo) values ('Ecuador', false);
+insert into paises (nombre, activo) values ('Túnez', false);
+insert into paises (nombre, activo) values ('Uruguay', false);
+insert into paises (nombre, activo) values ('Nueva Zelanda', false);
+insert into paises (nombre, activo) values ('Noruega', false);
+insert into paises (nombre, activo) values ('Jordania', false);
+insert into paises (nombre, activo) values ('Panamá', false);
+insert into paises (nombre, activo) values ('Colombia', false);
+insert into paises (nombre, activo) values ('Bosnia', false);
+insert into paises (nombre, activo) values ('Marruecos', false);
+insert into paises (nombre, activo) values ('Sudáfrica', false);
+insert into paises (nombre, activo) values ('Curazao', false);
+insert into paises (nombre, activo) values ('Japón', false);
+insert into paises (nombre, activo) values ('Paraguay', false);
+insert into paises (nombre, activo) values ('Senegal', false);
+insert into paises (nombre, activo) values ('Cabo Verde', false);
+insert into paises (nombre, activo) values ('Egipto', false);
+insert into paises (nombre, activo) values ('Croacia', false);
+insert into paises (nombre, activo) values ('Rep. D. Congo', false);
+insert into paises (nombre, activo) values ('Argelia', false);
+
+
+
+/*predicciones finales*/
+insert into predicciones_finales (participante_id, primer_lugar_id, segundo_lugar_id, tercer_lugar_id) values ('1', 10, 19, 17);
+insert into predicciones_finales (participante_id, primer_lugar_id, segundo_lugar_id, tercer_lugar_id) values ('2', 13, 19, 17); 
+insert into predicciones_finales (participante_id, primer_lugar_id, segundo_lugar_id, tercer_lugar_id) values ('3', 13, 17, 19);
+insert into predicciones_finales (participante_id, primer_lugar_id, segundo_lugar_id, tercer_lugar_id) values ('4', 17, 22, 19);
+insert into predicciones_finales (participante_id, primer_lugar_id, segundo_lugar_id, tercer_lugar_id) values ('5', 21, 19, 17);
+insert into predicciones_finales (participante_id, primer_lugar_id, segundo_lugar_id, tercer_lugar_id) values (6, 6, 19, 17);
+insert into predicciones_finales (participante_id, primer_lugar_id, segundo_lugar_id, tercer_lugar_id) values (7, 9, 10, 21);
+insert into predicciones_finales (participante_id, primer_lugar_id, segundo_lugar_id, tercer_lugar_id) values (8, 9, 6, 19);
+insert into predicciones_finales (participante_id, primer_lugar_id, segundo_lugar_id, tercer_lugar_id) values (9, 21, 17, 19);
+insert into predicciones_finales (participante_id, primer_lugar_id, segundo_lugar_id, tercer_lugar_id) values (10, 19, 17, 6);
+insert into predicciones_finales (participante_id, primer_lugar_id, segundo_lugar_id, tercer_lugar_id) values (11, 17, 9, 19);
+insert into predicciones_finales (participante_id, primer_lugar_id, segundo_lugar_id, tercer_lugar_id) values (12, 21, 19, 17);
+insert into predicciones_finales (participante_id, primer_lugar_id, segundo_lugar_id, tercer_lugar_id) values (13, 17, 19, 13);
+insert into predicciones_finales (participante_id, primer_lugar_id, segundo_lugar_id, tercer_lugar_id) values (14, 13, 19, 17);
+insert into predicciones_finales (participante_id, primer_lugar_id, segundo_lugar_id, tercer_lugar_id) values (15, 19, 17, 36);
+insert into predicciones_finales (participante_id, primer_lugar_id, segundo_lugar_id, tercer_lugar_id) values (16, 17, 6, 19);
+insert into predicciones_finales (participante_id, primer_lugar_id, segundo_lugar_id, tercer_lugar_id) values (17, 17, 19, 13);
+insert into predicciones_finales (participante_id, primer_lugar_id, segundo_lugar_id, tercer_lugar_id) values (18, 19, 17, 6);

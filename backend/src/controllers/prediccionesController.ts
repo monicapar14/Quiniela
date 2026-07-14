@@ -375,3 +375,35 @@ export const getPrediccionesParticipante = async (
 
     }
 };
+
+export const finales = async (req: Request, res: Response) => {
+    try {
+        const [rows] = await pool.query(`SELECT p.nombre AS participante, pf.primer_lugar_id,
+                                                (SELECT pa.nombre
+                                                    FROM paises pa
+                                                    WHERE pa.id = pf.primer_lugar_id) AS primer_lugar,
+                                                (SELECT pa.activo
+                                                    FROM paises pa
+                                                    WHERE pa.id = pf.primer_lugar_id) AS status_primer_lugar,
+                                                pf.segundo_lugar_id,
+                                                (SELECT pa.nombre
+                                                    FROM paises pa
+                                                    WHERE pa.id = pf.segundo_lugar_id) AS segundo_lugar,
+                                                (SELECT pa.activo
+                                                    FROM paises pa
+                                                    WHERE pa.id = pf.segundo_lugar_id) AS status_segundo_lugar,
+                                                pf.tercer_lugar_id,
+                                                (SELECT pa.nombre
+                                                    FROM paises pa
+                                                    WHERE pa.id = pf.tercer_lugar_id) AS tercer_lugar,
+                                                (SELECT pa.activo
+                                                    FROM paises pa
+                                                    WHERE pa.id = pf.tercer_lugar_id) AS status_tercer_lugar
+                                            FROM participantes p, predicciones_finales pf
+                                            WHERE p.id = pf.participante_id`)
+        res.json(rows)
+    } catch (error) {
+        console.error('Error al obtener las prediciones finales:', error)
+        res.status(500).json({ message: 'Error al obtener las prediciones finales' })
+    }
+}

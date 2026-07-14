@@ -72,6 +72,7 @@ html, body {
 .tile-green  { background: linear-gradient(135deg, #16a34a, #15803d); }
 .tile-orange { background: linear-gradient(135deg, #f59e0b, #d97706); }
 .tile-purple { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
+.tile-gold { background: linear-gradient(135deg, #e23c43, #e23c43); }
 .tile-red {
   background: linear-gradient(135deg, #ef4444, #b91c1c);
   color: white;

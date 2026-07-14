@@ -1,0 +1,524 @@
+.predicciones-page {
+  flex: 1;
+  padding: 40px 20px;
+  background-image: url('../img/fondoc3.png');
+  background-repeat: repeat;      /* Repetir la imagen */
+  background-size: auto;          /* Tamaño original */
+  background-position: top left;  /* Desde la esquina superior izquierda */
+
+  position: relative;
+  font-family: system-ui, sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+.predicciones-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 8, 23, 0.78);
+}
+
+.predicciones-page > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== TÍTULO ===== */
+.predicciones-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 28px;
+  text-align: center;
+  text-shadow:
+    0 0 20px rgba(255, 205, 0, 0.4),
+    0 0 60px rgba(226, 40, 46, 0.3);
+  animation: tituloGlow 3s ease-in-out infinite alternate;
+  letter-spacing: 2px;
+}
+
+@keyframes tituloGlow {
+  from {
+    text-shadow:
+      0 0 20px rgba(255, 205, 0, 0.4),
+      0 0 60px rgba(226, 40, 46, 0.2);
+  }
+  to {
+    text-shadow:
+      0 0 30px rgba(255, 205, 0, 0.7),
+      0 0 80px rgba(226, 40, 46, 0.4),
+      0 0 120px rgba(0, 63, 114, 0.3);
+  }
+}
+
+/* ===== WRAPPER & CARD ===== */
+.predicciones-wrapper {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+}
+
+.predicciones-card {
+  width: 100%;
+  max-width: 1000px;
+  background: #f8fafc;
+  border-radius: 24px;
+  overflow-x: auto;
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.08);
+  align-self: flex-start;
+  animation: cardEntrance 0.6s ease-out;
+}
+
+@keyframes cardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===== TABLA ===== */
+.predicciones-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+/* ── HEADER con colores del Mundial 2026 ── */
+.predicciones-table thead {
+  background: linear-gradient(
+    135deg,
+    #e2282e 0%,
+    #003f72 35%,
+    #009739 65%,
+    #ffcd00 100%
+  );
+  color: white;
+}
+
+.predicciones-table th {
+  padding: clamp(14px, 2vw, 20px);
+  text-align: left;
+  font-weight: 800;
+  font-size: clamp(13px, 2vw, 16px);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* ── BODY ── */
+.predicciones-table td {
+  padding: clamp(12px, 2vw, 18px);
+  border-bottom: 1px solid #e2e8f0;
+  font-size: clamp(13px, 2vw, 15px);
+  vertical-align: middle;
+}
+
+/* filas alternadas */
+.predicciones-table tbody tr:nth-child(even) {
+  background: linear-gradient(
+    90deg,
+    rgba(226, 40, 46, 0.03),
+    rgba(0, 63, 114, 0.03)
+  );
+}
+
+/* hover festivo */
+.predicciones-table tbody tr {
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.predicciones-table tbody tr:hover {
+  background: linear-gradient(
+    90deg,
+    rgba(226, 40, 46, 0.08),
+    rgba(255, 205, 0, 0.06)
+  );
+  transform: scale(1.008);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* ── CELDA PARTICIPANTE ── */
+.pred-nombre {
+  font-weight: 800;
+  color: #0f172a;
+  font-size: clamp(14px, 2vw, 17px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pred-nombre::before {
+  content: "⚽";
+  font-size: 1.2rem;
+  animation: pelotaGiro 3s linear infinite;
+}
+
+@keyframes pelotaGiro {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* evita que gire en hover (molesto) */
+.pred-nombre:hover::before {
+  animation: none;
+  transform: scale(1.3);
+}
+
+/* ===== CONTENEDOR EQUIPO + EMOJI ===== */
+.pred-equipo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ── NOMBRE DEL EQUIPO ── */
+.pred-equipo-nombre {
+  font-weight: 700;
+  color: #1e293b;
+  padding: 5px 14px;
+  border-radius: 8px;
+  font-size: clamp(13px, 2vw, 15px);
+  transition: all 0.25s ease;
+}
+
+.pred-equipo-nombre.oro {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.18), rgba(255, 215, 0, 0.08));
+  border: 1px solid rgba(255, 215, 0, 0.35);
+  color: #7c5e00;
+}
+
+.pred-equipo-nombre.plata {
+  background: linear-gradient(135deg, rgba(192, 192, 192, 0.25), rgba(192, 192, 192, 0.1));
+  border: 1px solid rgba(192, 192, 192, 0.35);
+  color: #4a4a4a;
+}
+
+.pred-equipo-nombre.bronce {
+  background: linear-gradient(135deg, rgba(205, 127, 50, 0.2), rgba(205, 127, 50, 0.08));
+  border: 1px solid rgba(205, 127, 50, 0.35);
+  color: #6b3f0e;
+}
+
+.pred-equipo-nombre:hover {
+  transform: translateY(-2px);
+}
+
+.pred-equipo-nombre.oro:hover {
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+}
+
+.pred-equipo-nombre.plata:hover {
+  box-shadow: 0 4px 15px rgba(192, 192, 192, 0.3);
+}
+
+.pred-equipo-nombre.bronce:hover {
+  box-shadow: 0 4px 15px rgba(205, 127, 50, 0.3);
+}
+
+/* ===== EMOJIS DE ESTADO ===== */
+.emoji-correct,
+.emoji-incorrect {
+  font-size: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+  animation: emojiPop 0.4s ease-out backwards;
+  position: relative;
+}
+
+.emoji-correct {
+  background: radial-gradient(circle, rgba(22, 163, 74, 0.15), rgba(22, 163, 74, 0.05));
+  box-shadow: 0 0 25px rgba(22, 163, 74, 0.25);
+  animation-delay: calc(var(--i, 0) * 0.05s);
+}
+
+.emoji-correct:focus {
+  outline: none;
+}
+
+.emoji-correct:hover,
+.emoji-correct:focus {
+  transform: scale(1.25) rotate(-8deg);
+  box-shadow: 0 0 40px rgba(22, 163, 74, 0.45);
+  background: radial-gradient(circle, rgba(22, 163, 74, 0.25), rgba(22, 163, 74, 0.08));
+}
+
+.emoji-incorrect {
+  background: radial-gradient(circle, rgba(220, 38, 38, 0.12), rgba(220, 38, 38, 0.04));
+  box-shadow: 0 0 20px rgba(220, 38, 38, 0.15);
+  animation-delay: calc(var(--i, 0) * 0.05s);
+}
+
+.emoji-incorrect:focus {
+  outline: none;
+}
+
+.emoji-incorrect:hover,
+.emoji-incorrect:focus {
+  transform: scale(1.25) rotate(8deg);
+  box-shadow: 0 0 35px rgba(220, 38, 38, 0.35);
+  background: radial-gradient(circle, rgba(220, 38, 38, 0.2), rgba(220, 38, 38, 0.06));
+}
+
+/* ===== TOOLTIPS ===== */
+.emoji-correct::after,
+.emoji-incorrect::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) scale(0.8);
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+.emoji-correct::before,
+.emoji-incorrect::before {
+  content: "";
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.85);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.emoji-correct:hover::after,
+.emoji-correct:focus::after,
+.emoji-correct:hover::before,
+.emoji-correct:focus::before,
+.emoji-incorrect:hover::after,
+.emoji-incorrect:focus::after,
+.emoji-incorrect:hover::before,
+.emoji-incorrect:focus::before {
+  opacity: 1;
+  visibility: visible;
+}
+
+.emoji-correct:hover::after,
+.emoji-correct:focus::after,
+.emoji-incorrect:hover::after,
+.emoji-incorrect:focus::after {
+  transform: translateX(-50%) scale(1);
+}
+
+@keyframes emojiPop {
+  from {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ===== FILA PERFECTA (opcional: si todas las posiciones son correctas) ===== */
+.pred-fila-perfecta {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 215, 0, 0.08),
+    rgba(255, 205, 0, 0.04)
+  ) !important;
+  border-left: 4px solid #ffcd00;
+}
+
+/* ===== FOOTER ===== */
+.pred-footer {
+  text-align: center;
+  margin-top: 36px;
+  margin-bottom: 10px;
+}
+
+/* ── Botón divertido ── */
+.worldcup-btn {
+  background: linear-gradient(135deg, #e2282e, #003f72, #009739);
+  background-size: 200% 200%;
+  animation: banderaWave 4s ease-in-out infinite;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 14px 32px;
+  font-weight: 800;
+  font-size: 15px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 10px 30px rgba(226, 40, 46, 0.35);
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+}
+
+@keyframes banderaWave {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.worldcup-btn:hover {
+  transform: translateY(-5px) scale(1.06);
+  box-shadow: 0 18px 40px rgba(226, 40, 46, 0.5);
+}
+
+.worldcup-btn:active {
+  transform: scale(0.95);
+}
+
+/* ===== CONFETTI DIVERTIDO (decoración) ===== */
+.predicciones-card::after {
+  content: "🎉✨⚽🌟🎊";
+  position: absolute;
+  bottom: -10px;
+  right: 20px;
+  font-size: 1.6rem;
+  opacity: 0.2;
+  pointer-events: none;
+  letter-spacing: 8px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 700px) {
+  .predicciones-page {
+    padding: 20px 10px;
+  }
+
+  .predicciones-card {
+    border-radius: 16px;
+  }
+
+  .predicciones-card::after {
+    display: none;
+  }
+
+  .predicciones-table th,
+  .predicciones-table td {
+    padding: 10px 6px;
+    font-size: 12px;
+  }
+
+  .emoji-correct,
+  .emoji-incorrect {
+    width: 38px;
+    height: 38px;
+    font-size: 1.5rem;
+  }
+
+  .emoji-correct::after,
+  .emoji-incorrect::after {
+    font-size: 0.7rem;
+    padding: 4px 10px;
+  }
+
+  .pred-equipo-nombre {
+    padding: 3px 8px;
+    font-size: 12px;
+  }
+
+  .worldcup-btn {
+    padding: 10px 22px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .predicciones-page {
+    padding: 12px 6px;
+  }
+
+  .predicciones-title {
+    font-size: clamp(1.2rem, 6vw, 1.6rem);
+    margin-bottom: 16px;
+    gap: 8px;
+  }
+
+  .predicciones-card {
+    border-radius: 12px;
+  }
+
+  .predicciones-table {
+    min-width: 420px;
+  }
+
+  .predicciones-table th,
+  .predicciones-table td {
+    padding: 8px 4px;
+    font-size: 11px;
+  }
+
+  .pred-nombre {
+    font-size: 12px;
+    gap: 4px;
+  }
+
+  .pred-nombre::before {
+    font-size: 0.9rem;
+  }
+
+  .pred-equipo {
+    gap: 6px;
+  }
+
+  .pred-equipo-nombre {
+    padding: 2px 6px;
+    font-size: 10px;
+  }
+
+  .emoji-correct,
+  .emoji-incorrect {
+    width: 30px;
+    height: 30px;
+    font-size: 1.2rem;
+  }
+
+  .emoji-correct::after,
+  .emoji-incorrect::after {
+    font-size: 0.6rem;
+    padding: 3px 8px;
+    bottom: calc(100% + 6px);
+  }
+
+  .worldcup-btn {
+    padding: 8px 18px;
+    font-size: 12px;
+  }
+
+  .pred-footer {
+    margin-top: 20px;
+  }
+}

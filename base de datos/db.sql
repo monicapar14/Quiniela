@@ -44,11 +44,8 @@ CREATE TABLE partidos (
 );
 
 CREATE TABLE participantes (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    --usuario_id INT NULL,
-    nombre VARCHAR(100) NOT NULL,
-
-    --FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+    id INT AUTO_INCREMENT PRIMARY KEY
+    nombre VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE predicciones (
@@ -99,4 +96,24 @@ CREATE TABLE ranking (
     exactos_totales INT DEFAULT 0,
 
     FOREIGN KEY (participante_id) REFERENCES participantes(id)
+);
+
+CREATE TABLE paises (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL UNIQUE,
+    activo BOOLEAN DEFAULT TRUE,
+    lugar int
+);
+
+
+CREATE TABLE predicciones_finales (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    participante_id INT NOT NULL UNIQUE,
+    primer_lugar_id INT,
+    segundo_lugar_id INT,
+    tercer_lugar_id INT,
+    FOREIGN KEY (participante_id) REFERENCES participantes(id),
+    FOREIGN KEY (primer_lugar_id) REFERENCES paises(id),
+    FOREIGN KEY (segundo_lugar_id) REFERENCES paises(id),
+    FOREIGN KEY (tercer_lugar_id) REFERENCES paises(id)
 );
