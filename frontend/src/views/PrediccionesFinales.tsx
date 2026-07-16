@@ -275,14 +275,16 @@ const PrediccionesFinales = () => {
                         </div>
                     </div>
                 </div>
-                <div className="podium-save-container">
-                    <button
-                        className="podium-save-btn"
-                        onClick={guardarPodio}
-                    >
-                        💾 Guardar
-                    </button>
-                </div>
+                {esAdmin && (
+                    <div className="podium-save-container">
+                        <button
+                            className="podium-save-btn"
+                            onClick={guardarPodio}
+                        >
+                            💾 Guardar
+                        </button>
+                    </div>
+                )}
                 <div className="predicciones-wrapper">
                     <div className="predicciones-card">
                         <table className="predicciones-table">
